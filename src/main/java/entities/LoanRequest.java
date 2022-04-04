@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import org.hyperledger.fabric.contract.annotation.*;
+import com.owlike.genson.annotation.*;
+import java.util.stream.*;
 
 @DataType()
 public class LoanRequest implements Serializable {
@@ -49,11 +51,23 @@ public class LoanRequest implements Serializable {
 	private int creditScore;
 	
 	/* all references */
+	@JsonProperty
+	private Object ApprovalLoanPK;
 	private Loan ApprovalLoan; 
+	@JsonProperty
+	private Object RequestedCAHistoryPK;
 	private CheckingAccount RequestedCAHistory; 
+	@JsonProperty
+	private Object RequestedCreditHistoryPK;
 	private CreditHistory RequestedCreditHistory; 
+	@JsonProperty
+	private Object AttachedApprovalLetterPK;
 	private ApprovalLetter AttachedApprovalLetter; 
+	@JsonProperty
+	private Object AttachedLoanAgreementPK;
 	private LoanAgreement AttachedLoanAgreement; 
+	@JsonProperty
+	private List<Object> AttachedLoanTermsPKs = new LinkedList<>();
 	private List<LoanTerm> AttachedLoanTerms = new LinkedList<LoanTerm>(); 
 	
 	/* all get and set functions */
@@ -164,50 +178,77 @@ public class LoanRequest implements Serializable {
 	}
 	
 	/* all functions for reference*/
+	@JsonIgnore
 	public Loan getApprovalLoan() {
+		if (ApprovalLoan == null)
+			ApprovalLoan = EntityManager.getLoanByPK(ApprovalLoanPK);
 		return ApprovalLoan;
 	}	
 	
 	public void setApprovalLoan(Loan loan) {
 		this.ApprovalLoan = loan;
+		this.ApprovalLoanPK = loan.getPK();
 	}			
+	@JsonIgnore
 	public CheckingAccount getRequestedCAHistory() {
+		if (RequestedCAHistory == null)
+			RequestedCAHistory = EntityManager.getCheckingAccountByPK(RequestedCAHistoryPK);
 		return RequestedCAHistory;
 	}	
 	
 	public void setRequestedCAHistory(CheckingAccount checkingaccount) {
 		this.RequestedCAHistory = checkingaccount;
+		this.RequestedCAHistoryPK = checkingaccount.getPK();
 	}			
+	@JsonIgnore
 	public CreditHistory getRequestedCreditHistory() {
+		if (RequestedCreditHistory == null)
+			RequestedCreditHistory = EntityManager.getCreditHistoryByPK(RequestedCreditHistoryPK);
 		return RequestedCreditHistory;
 	}	
 	
 	public void setRequestedCreditHistory(CreditHistory credithistory) {
 		this.RequestedCreditHistory = credithistory;
+		this.RequestedCreditHistoryPK = credithistory.getPK();
 	}			
+	@JsonIgnore
 	public ApprovalLetter getAttachedApprovalLetter() {
+		if (AttachedApprovalLetter == null)
+			AttachedApprovalLetter = EntityManager.getApprovalLetterByPK(AttachedApprovalLetterPK);
 		return AttachedApprovalLetter;
 	}	
 	
 	public void setAttachedApprovalLetter(ApprovalLetter approvalletter) {
 		this.AttachedApprovalLetter = approvalletter;
+		this.AttachedApprovalLetterPK = approvalletter.getPK();
 	}			
+	@JsonIgnore
 	public LoanAgreement getAttachedLoanAgreement() {
+		if (AttachedLoanAgreement == null)
+			AttachedLoanAgreement = EntityManager.getLoanAgreementByPK(AttachedLoanAgreementPK);
 		return AttachedLoanAgreement;
 	}	
 	
 	public void setAttachedLoanAgreement(LoanAgreement loanagreement) {
 		this.AttachedLoanAgreement = loanagreement;
+		this.AttachedLoanAgreementPK = loanagreement.getPK();
 	}			
+	@JsonIgnore
 	public List<LoanTerm> getAttachedLoanTerms() {
+		if (AttachedLoanTerms == null)
+			AttachedLoanTerms = AttachedLoanTermsPKs.stream().map(EntityManager::getLoanTermByPK).collect(Collectors.toList());
 		return AttachedLoanTerms;
 	}	
 	
 	public void addAttachedLoanTerms(LoanTerm loanterm) {
+		getAttachedLoanTerms();
+		this.AttachedLoanTermsPKs.add(loanterm.getPK());
 		this.AttachedLoanTerms.add(loanterm);
 	}
 	
 	public void deleteAttachedLoanTerms(LoanTerm loanterm) {
+		getAttachedLoanTerms();
+		this.AttachedLoanTermsPKs.remove(loanterm.getPK());
 		this.AttachedLoanTerms.remove(loanterm);
 	}
 	

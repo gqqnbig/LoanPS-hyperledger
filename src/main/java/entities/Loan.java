@@ -39,7 +39,11 @@ public class Loan implements Serializable {
 	private float repaymentAmount;
 	
 	/* all references */
+	@JsonProperty
+	private Object ReferedLoanRequestPK;
 	private LoanRequest ReferedLoanRequest; 
+	@JsonProperty
+	private Object BelongedLoanAccountPK;
 	private LoanAccount BelongedLoanAccount; 
 	
 	/* all get and set functions */
@@ -114,19 +118,27 @@ public class Loan implements Serializable {
 	}
 	
 	/* all functions for reference*/
+	@JsonIgnore
 	public LoanRequest getReferedLoanRequest() {
+		if (ReferedLoanRequest == null)
+			ReferedLoanRequest = EntityManager.getLoanRequestByPK(ReferedLoanRequestPK);
 		return ReferedLoanRequest;
 	}	
 	
 	public void setReferedLoanRequest(LoanRequest loanrequest) {
 		this.ReferedLoanRequest = loanrequest;
+		this.ReferedLoanRequestPK = loanrequest.getPK();
 	}			
+	@JsonIgnore
 	public LoanAccount getBelongedLoanAccount() {
+		if (BelongedLoanAccount == null)
+			BelongedLoanAccount = EntityManager.getLoanAccountByPK(BelongedLoanAccountPK);
 		return BelongedLoanAccount;
 	}	
 	
 	public void setBelongedLoanAccount(LoanAccount loanaccount) {
 		this.BelongedLoanAccount = loanaccount;
+		this.BelongedLoanAccountPK = loanaccount.getPK();
 	}			
 	
 
