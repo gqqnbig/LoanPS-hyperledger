@@ -48,12 +48,12 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 	/* Generate buiness logic according to functional requirement */
 	
 	@Transaction(intent = Transaction.TYPE.SUBMIT)
-	public List<LoanRequest> listApprovalRequest(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+	public LoanRequest[] listApprovalRequest(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		ChaincodeStub stub = ctx.getStub();
 		EntityManager.setStub(stub);
 
 		var res = listApprovalRequest();
-		return res;
+		return res.toArray(LoanRequest[]::new);
 	}
 
 	@SuppressWarnings("unchecked")

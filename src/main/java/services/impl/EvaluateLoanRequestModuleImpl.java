@@ -48,12 +48,12 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 	/* Generate buiness logic according to functional requirement */
 	
 	@Transaction(intent = Transaction.TYPE.SUBMIT)
-	public List<LoanRequest> listTenLoanRequest(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+	public LoanRequest[] listTenLoanRequest(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		ChaincodeStub stub = ctx.getStub();
 		EntityManager.setStub(stub);
 
 		var res = listTenLoanRequest();
-		return res;
+		return res.toArray(LoanRequest[]::new);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -241,12 +241,12 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 	
 	
 	@Transaction(intent = Transaction.TYPE.SUBMIT)
-	public List<LoanTerm> listAvaiableLoanTerm(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+	public LoanTerm[] listAvaiableLoanTerm(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		ChaincodeStub stub = ctx.getStub();
 		EntityManager.setStub(stub);
 
 		var res = listAvaiableLoanTerm();
-		return res;
+		return res.toArray(LoanTerm[]::new);
 	}
 
 	@SuppressWarnings("unchecked")

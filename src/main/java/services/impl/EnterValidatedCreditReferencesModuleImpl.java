@@ -48,12 +48,12 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 	/* Generate buiness logic according to functional requirement */
 	
 	@Transaction(intent = Transaction.TYPE.SUBMIT)
-	public List<LoanRequest> listSubmitedLoanRequest(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+	public LoanRequest[] listSubmitedLoanRequest(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		ChaincodeStub stub = ctx.getStub();
 		EntityManager.setStub(stub);
 
 		var res = listSubmitedLoanRequest();
-		return res;
+		return res.toArray(LoanRequest[]::new);
 	}
 
 	@SuppressWarnings("unchecked")
