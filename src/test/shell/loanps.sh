@@ -58,6 +58,15 @@ testSubmitLoanRequest() {
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"SubmitLoanRequestModuleImpl:enterLoanInformation","Args":["1","1","1","1","1","1","1","1","1","1","1","1","1"]}' || fail || return
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"SubmitLoanRequestModuleImpl:creditRequest","Args":[]}' || fail || return
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"SubmitLoanRequestModuleImpl:accountStatusRequest","Args":[]}' || fail || return
+
+	writes=$(getBlockInfo | jq -r '.. |.ns_rwset? | .[]? | select(.namespace=="loanps"?)  | .rwset.writes[] | select(.key=="CheckingAccount"?).value' | base64 --decode)
+	if [[ "$writes" != "[]" ]] && [[ "$writes" != "[null]" ]]; then
+		fail "The default implementation of ThirdPartyServicesImpl returns null for getCheckingAccountStatus." || return
+	fi
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"TestHelper:fixEmptyRequestedCAHistory","Args":[]}' || fail || return
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"TestHelper:fixEmptyRequestedCreditHistory","Args":[]}' || fail || return
+
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"SubmitLoanRequestModuleImpl:calculateScore","Args":[]}' || fail || return
 
 }
