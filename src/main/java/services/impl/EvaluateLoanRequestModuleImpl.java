@@ -365,7 +365,9 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 			;
 			// post-condition checking
 			if (!(this.getCurrentLoanRequest().getStatus() == LoanRequestStatus.APPROVED
-			 && 
+			 &&
+			EntityManager.saveModified(LoanRequest.class)
+			 &&
 			true)) {
 				throw new PostconditionException();
 			}
