@@ -54,6 +54,18 @@ getBlockInfo() {
 	configtxlator proto_decode --type common.Block --input mychannel.block
 }
 
+testManageLoanTerm() {
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"ManageLoanTermCRUDServiceImpl:createLoanTerm","Args":["12","first"]}' || fail || return
+	output=$(peer chaincode query -C mychannel -n loanps -c '{"function":"ManageLoanTermCRUDServiceImpl:queryLoanTerm","Args":["12"]}')
+	assertContains "$output" "first"
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"ManageLoanTermCRUDServiceImpl:modifyLoanTerm","Args":["12","second"]}' || fail || return
+	output=$(peer chaincode query -C mychannel -n loanps -c '{"function":"ManageLoanTermCRUDServiceImpl:queryLoanTerm","Args":["12"]}')
+	assertContains "$output" "second"
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"ManageLoanTermCRUDServiceImpl:deleteLoanTerm","Args":["12"]}' || fail || return
+}
+
 testSubmitLoanRequest() {
 	if pci -C mychannel -n loanps --waitForEvent -c '{"function":"EnterValidatedCreditReferencesModuleImpl:listSubmitedLoanRequest","Args":[]}'; then
 		fail "When there are not loans, this method is expected to fail rather than returning empty array." || return
