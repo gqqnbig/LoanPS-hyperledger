@@ -295,7 +295,9 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			if (!(this.getCurrentLoanRequest().getCreditScore() == 100
 			 && 
 			this.getCurrentLoanRequest().getStatus() == LoanRequestStatus.SUBMITTED
-			 && 
+			 &&
+			EntityManager.saveModified(LoanRequest.class)
+			 &&
 			true)) {
 				throw new PostconditionException();
 			}
