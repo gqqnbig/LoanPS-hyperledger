@@ -43,9 +43,7 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 	
 	
 	/* Generate inject for sharing temp variables between use cases in system service */
-	public void refresh() {
-		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf(LoanProcessingSystemSystem.class).get(0);
-	}
+	
 	
 	/* Generate buiness logic according to functional requirement */
 	
@@ -89,7 +87,7 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 			EntityManager.addObject("LoanTerm", loa);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true && 
 			loa.getItemID() == itemid
@@ -104,7 +102,7 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -154,13 +152,13 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 			/* Logic here */
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true)) {
 				throw new PostconditionException();
 			}
 			
-			refresh(); return loanterm;
+			; return loanterm;
 		}
 		else
 		{
@@ -207,19 +205,21 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 			loanterm.setContent(content);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(loanterm.getItemID() == itemid
 			 && 
 			loanterm.getContent() == content
 			 && 
+			EntityManager.saveModified(LoanTerm.class)
+			 &&
 			true)) {
 				throw new PostconditionException();
 			}
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -270,7 +270,7 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 			EntityManager.deleteObject("LoanTerm", loanterm);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(StandardOPs.excludes(((List<LoanTerm>)EntityManager.getAllInstancesOf(LoanTerm.class)), loanterm)
 			 && 
@@ -280,7 +280,7 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else

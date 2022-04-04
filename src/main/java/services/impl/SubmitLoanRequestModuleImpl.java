@@ -43,9 +43,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 	
 	
 	/* Generate inject for sharing temp variables between use cases in system service */
-	public void refresh() {
-		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf(LoanProcessingSystemSystem.class).get(0);
-	}
+	
 	
 	/* Generate buiness logic according to functional requirement */
 	
@@ -101,7 +99,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			this.setCurrentLoanRequest(loa);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true && 
 			loa.getRequestID() == requestid
@@ -140,7 +138,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -181,7 +179,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			EntityManager.addObject("CreditHistory", his);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true && 
 			true
@@ -190,13 +188,15 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			 && 
 			StandardOPs.includes(((List<CreditHistory>)EntityManager.getAllInstancesOf(CreditHistory.class)), his)
 			 && 
+			EntityManager.saveModified(LoanRequest.class)
+			 &&
 			true)) {
 				throw new PostconditionException();
 			}
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -236,7 +236,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			EntityManager.addObject("CheckingAccount", ca);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true && 
 			true
@@ -251,7 +251,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -288,7 +288,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			this.getCurrentLoanRequest().setStatus(LoanRequestStatus.SUBMITTED);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(this.getCurrentLoanRequest().getCreditScore() == 100
 			 && 
@@ -300,7 +300,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return this.getCurrentLoanRequest().getCreditScore();
 		}
 		else

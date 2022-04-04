@@ -35,18 +35,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 		services = new ThirdPartyServicesImpl();
 	}
 
-	public void refresh() {
-		SubmitLoanRequestModule submitloanrequestmodule_service = (SubmitLoanRequestModule) ServiceManager
-				.getAllInstancesOf(SubmitLoanRequestModule.class).get(0);
-		EnterValidatedCreditReferencesModule entervalidatedcreditreferencesmodule_service = (EnterValidatedCreditReferencesModule) ServiceManager
-				.getAllInstancesOf(EnterValidatedCreditReferencesModule.class).get(0);
-		EvaluateLoanRequestModule evaluateloanrequestmodule_service = (EvaluateLoanRequestModule) ServiceManager
-				.getAllInstancesOf(EvaluateLoanRequestModule.class).get(0);
-		GenerateLoanLetterAndAgreementModule generateloanletterandagreementmodule_service = (GenerateLoanLetterAndAgreementModule) ServiceManager
-				.getAllInstancesOf(GenerateLoanLetterAndAgreementModule.class).get(0);
-		ManageLoanTermCRUDService manageloantermcrudservice_service = (ManageLoanTermCRUDService) ServiceManager
-				.getAllInstancesOf(ManageLoanTermCRUDService.class).get(0);
-	}			
+				
 	
 	/* Generate buiness logic according to functional requirement */
 	
@@ -142,7 +131,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 			loa.setReferedLoanRequest(r);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true && 
 			loa.getLoanID() == loanid
@@ -177,13 +166,15 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 			 && 
 			loa.getReferedLoanRequest() == r
 			 && 
+			EntityManager.saveModified(Loan.class) && EntityManager.saveModified(LoanAccount.class) && EntityManager.saveModified(LoanRequest.class)
+			 &&
 			true)) {
 				throw new PostconditionException();
 			}
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -236,7 +227,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 			}
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(((BooleanSupplier) () -> {							
 				for (Loan l : loans) {
@@ -253,7 +244,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -306,7 +297,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 			}
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(((BooleanSupplier) () -> {							
 				for (Loan l : loans) {
@@ -323,7 +314,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -358,7 +349,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 			/* Logic here */
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true)) {
 				throw new PostconditionException();
@@ -366,7 +357,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -417,17 +408,19 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 			loan.setRemainAmountToPay(loan.getRemainAmountToPay()-loan.getRepaymentAmount());
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(loan.getRemainAmountToPay() == Pre_loan.getRemainAmountToPay()-loan.getRepaymentAmount()
 			 && 
+			EntityManager.saveModified(Loan.class)
+			 &&
 			true)) {
 				throw new PostconditionException();
 			}
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -477,17 +470,19 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 			loan.setStatus(LoanStatus.CLOSED);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(loan.getStatus() == LoanStatus.CLOSED
 			 && 
+			EntityManager.saveModified(Loan.class)
+			 &&
 			true)) {
 				throw new PostconditionException();
 			}
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else

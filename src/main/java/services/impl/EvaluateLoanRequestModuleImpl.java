@@ -43,9 +43,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 	
 	
 	/* Generate inject for sharing temp variables between use cases in system service */
-	public void refresh() {
-		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf(LoanProcessingSystemSystem.class).get(0);
-	}
+	
 	
 	/* Generate buiness logic according to functional requirement */
 	
@@ -84,7 +82,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 			this.setCurrentLoanRequests(rs);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(this.getCurrentLoanRequests() == rs
 			 && 
@@ -92,7 +90,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 				throw new PostconditionException();
 			}
 			
-			refresh(); return rs;
+			; return rs;
 		}
 		else
 		{
@@ -141,7 +139,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 			this.setCurrentLoanRequest(rs);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(this.getCurrentLoanRequest() == rs
 			 && 
@@ -149,7 +147,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 				throw new PostconditionException();
 			}
 			
-			refresh(); return rs;
+			; return rs;
 		}
 		else
 		{
@@ -183,13 +181,13 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 			/* Logic here */
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true)) {
 				throw new PostconditionException();
 			}
 			
-			refresh(); return currentLoanRequest.getRequestedCreditHistory();
+			; return currentLoanRequest.getRequestedCreditHistory();
 		}
 		else
 		{
@@ -223,13 +221,13 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 			/* Logic here */
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true)) {
 				throw new PostconditionException();
 			}
 			
-			refresh(); return currentLoanRequest.getRequestedCAHistory();
+			; return currentLoanRequest.getRequestedCAHistory();
 		}
 		else
 		{
@@ -263,13 +261,13 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 			/* Logic here */
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true)) {
 				throw new PostconditionException();
 			}
 			
-			refresh(); return ((List<LoanTerm>)EntityManager.getAllInstancesOf(LoanTerm.class));
+			; return ((List<LoanTerm>)EntityManager.getAllInstancesOf(LoanTerm.class));
 		}
 		else
 		{
@@ -315,17 +313,19 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 			currentLoanRequest.addAttachedLoanTerms(loanterm);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(StandardOPs.includes(currentLoanRequest.getAttachedLoanTerms(), loanterm)
 			 && 
+			EntityManager.saveModified(LoanRequest.class)
+			 &&
 			true)) {
 				throw new PostconditionException();
 			}
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -361,7 +361,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 			this.getCurrentLoanRequest().setStatus(LoanRequestStatus.APPROVED);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(this.getCurrentLoanRequest().getStatus() == LoanRequestStatus.APPROVED
 			 && 
@@ -371,7 +371,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else

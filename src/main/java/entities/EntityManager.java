@@ -602,5 +602,12 @@ public class EntityManager {
 		}
 		return null;
 	}
+
+	public static <T> boolean saveModified(Class<T> clazz) {
+		List<T> list = loadList(clazz);
+		String json = genson.serialize(list);
+		stub.putStringState(clazz.getSimpleName(), json);
+		return true;
+	}
 }
 

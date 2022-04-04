@@ -43,9 +43,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 	
 	
 	/* Generate inject for sharing temp variables between use cases in system service */
-	public void refresh() {
-		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf(LoanProcessingSystemSystem.class).get(0);
-	}
+	
 	
 	/* Generate buiness logic according to functional requirement */
 	
@@ -84,7 +82,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 			this.setCurrentLoanRequests(rs);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(this.getCurrentLoanRequests() == rs
 			 && 
@@ -92,7 +90,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 				throw new PostconditionException();
 			}
 			
-			refresh(); return rs;
+			; return rs;
 		}
 		else
 		{
@@ -146,7 +144,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 			EntityManager.addObject("ApprovalLetter", l);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true && 
 			l.getContent().equals("ApprovalLetterContent")
@@ -157,13 +155,15 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 			 && 
 			StandardOPs.includes(((List<ApprovalLetter>)EntityManager.getAllInstancesOf(ApprovalLetter.class)), l)
 			 && 
+			EntityManager.saveModified(LoanRequest.class)
+			 &&
 			true)) {
 				throw new PostconditionException();
 			}
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -199,7 +199,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 			services.sendEmail(currentLoanRequest.getEmail(), currentLoanRequest.getName(), "Your Loan Request was approved");
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true
 			 && 
@@ -209,7 +209,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -246,7 +246,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 			EntityManager.addObject("LoanAgreement", la);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true && 
 			la.getContent().equals("Loan Agreement")
@@ -261,7 +261,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -297,7 +297,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 			services.print(currentLoanRequest.getAttachedLoanAgreement().getContent(), number);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(true
 			 && 
@@ -307,7 +307,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
