@@ -105,6 +105,21 @@ testSubmitLoanRequest() {
 
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EnterValidatedCreditReferencesModuleImpl:chooseLoanRequest","Args":["1"]}' || fail || return
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EnterValidatedCreditReferencesModuleImpl:markRequestValid","Args":[]}' || fail || return
+
+	output=$(pci -C mychannel -n loanps --waitForEvent -c '{"function":"EvaluateLoanRequestModuleImpl:listTenLoanRequest","Args":[]}' 2>&1 |
+		sed -n -r 's/.+status:200[[:space:]]+payload:"(.+)"[[:space:]]*$/\1/p')
+	assertNotEquals "[]" "$output"
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EvaluateLoanRequestModuleImpl:chooseOneForReview","Args":["1"]}' || fail || return
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EvaluateLoanRequestModuleImpl:checkCreditHistory","Args":[]}' || fail || return
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EvaluateLoanRequestModuleImpl:reviewCheckingAccount","Args":[]}' || fail || return
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"ManageLoanTermCRUDServiceImpl:createLoanTerm","Args":["12","first"]}' || fail || return
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EvaluateLoanRequestModuleImpl:addLoanTerm","Args":["12"]}' || fail || return
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EvaluateLoanRequestModuleImpl:approveLoanRequest","Args":[]}' || fail || return
 }
 
 source shunit2
