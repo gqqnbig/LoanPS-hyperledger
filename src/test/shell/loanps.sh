@@ -138,4 +138,15 @@ testSubmitLoanRequest() {
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"GenerateLoanLetterAndAgreementModuleImpl:printLoanAgreement","Args":["1"]}' || fail || return
 }
 
+testBookNewLoan() {
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"TestHelper:createLoanAccount","Args":["1000","0","NORMAL"]}' || fail || return
+	if pci -C mychannel -n loanps --waitForEvent -c '{"function":"LoanProcessingSystemSystemImpl:bookNewLoan","Args":["1","1", "1000","2000-01-01","2020-01-01", "1"]}'; then
+		fail || return
+	fi
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"SubmitLoanRequestModuleImpl:enterLoanInformation","Args":["1","1","1","1","1","1","1","1","1","1","1","1","1"]}'
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"LoanProcessingSystemSystemImpl:bookNewLoan","Args":["1","1", "1000","2000-01-01","2020-01-01", "1"]}' || fail || return
+}
+
 source shunit2
