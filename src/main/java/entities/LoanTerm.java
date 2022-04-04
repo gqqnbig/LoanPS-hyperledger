@@ -12,6 +12,9 @@ import org.hyperledger.fabric.contract.annotation.*;
 
 @DataType()
 public class LoanTerm implements Serializable {
+	public Object getPK() {
+		return getItemID();
+	}
 	
 	/* all primary attributes */
 	@Property()

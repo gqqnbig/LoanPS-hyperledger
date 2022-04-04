@@ -9,9 +9,17 @@ import java.time.LocalDate;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import org.hyperledger.fabric.contract.annotation.*;
+import com.owlike.genson.annotation.*;
 
 @DataType()
 public class CreditHistory implements Serializable {
+
+	// Without @JsonProperty, genson will not set this field during deserialization.
+	@JsonProperty
+	private final String guid = EntityManager.getGuid();
+	public Object getPK() {
+		return guid;
+	}
 	
 	/* all primary attributes */
 	@Property()

@@ -14,6 +14,9 @@ import com.owlike.genson.annotation.*;
 
 @DataType()
 public class Loan implements Serializable {
+	public Object getPK() {
+		return getLoanID();
+	}
 	
 	/* all primary attributes */
 	@Property()
