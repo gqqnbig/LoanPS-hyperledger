@@ -18,6 +18,7 @@ import org.hyperledger.fabric.shim.*;
 import org.hyperledger.fabric.contract.annotation.*;
 import org.hyperledger.fabric.contract.*;
 import com.owlike.genson.Genson;
+import java.util.stream.*;
 
 @Contract
 public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLetterAndAgreementModule, Serializable, ContractInterface {
@@ -196,7 +197,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false) 
 		{ 
 			/* Logic here */
-			services.sendEmail(currentLoanRequest.getEmail(), currentLoanRequest.getName(), "Your Loan Request was approved");
+			services.sendEmail(getCurrentLoanRequest().getEmail(), getCurrentLoanRequest().getName(), "Your Loan Request was approved");
 			
 			
 			;
@@ -294,7 +295,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false) 
 		{ 
 			/* Logic here */
-			services.print(currentLoanRequest.getAttachedLoanAgreement().getContent(), number);
+			services.print(getCurrentLoanRequest().getAttachedLoanAgreement().getContent(), number);
 			
 			
 			;
@@ -321,39 +322,121 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 	
 	
 	/* temp property for controller */
+	private Object currentApprovalLetterPK;
 	private ApprovalLetter currentApprovalLetter;
+	private Object currentLoanAgreementPK;
 	private LoanAgreement currentLoanAgreement;
+	private Object currentLoanRequestPK;
 	private LoanRequest currentLoanRequest;
+	private List<Object> currentLoanRequestsPKs;
 	private List<LoanRequest> currentLoanRequests;
 			
 	/* all get and set functions for temp property*/
 	public ApprovalLetter getCurrentApprovalLetter() {
-		return currentApprovalLetter;
+		return EntityManager.getApprovalLetterByPK(getCurrentApprovalLetterPK());
+	}
+
+	private Object getCurrentApprovalLetterPK() {
+		if (currentApprovalLetterPK == null)
+			currentApprovalLetterPK = genson.deserialize(EntityManager.stub.getStringState("GenerateLoanLetterAndAgreementModuleImpl.currentApprovalLetterPK"), String.class);
+
+		return currentApprovalLetterPK;
 	}	
 	
 	public void setCurrentApprovalLetter(ApprovalLetter currentapprovalletter) {
+		if (currentapprovalletter != null)
+			setCurrentApprovalLetterPK(currentapprovalletter.getPK());
+		else
+			setCurrentApprovalLetterPK(null);
 		this.currentApprovalLetter = currentapprovalletter;
 	}
+
+	private void setCurrentApprovalLetterPK(Object currentApprovalLetterPK) {
+		String json = genson.serialize(currentApprovalLetterPK);
+		EntityManager.stub.putStringState("GenerateLoanLetterAndAgreementModuleImpl.currentApprovalLetterPK", json);
+		//If we set currentApprovalLetterPK to null, the getter thinks this fields is not initialized, thus will read the old value from chain.
+		if (currentApprovalLetterPK != null)
+			this.currentApprovalLetterPK = currentApprovalLetterPK;
+		else
+			this.currentApprovalLetterPK = EntityManager.getGuid();
+	}
 	public LoanAgreement getCurrentLoanAgreement() {
-		return currentLoanAgreement;
+		return EntityManager.getLoanAgreementByPK(getCurrentLoanAgreementPK());
+	}
+
+	private Object getCurrentLoanAgreementPK() {
+		if (currentLoanAgreementPK == null)
+			currentLoanAgreementPK = genson.deserialize(EntityManager.stub.getStringState("GenerateLoanLetterAndAgreementModuleImpl.currentLoanAgreementPK"), String.class);
+
+		return currentLoanAgreementPK;
 	}	
 	
 	public void setCurrentLoanAgreement(LoanAgreement currentloanagreement) {
+		if (currentloanagreement != null)
+			setCurrentLoanAgreementPK(currentloanagreement.getPK());
+		else
+			setCurrentLoanAgreementPK(null);
 		this.currentLoanAgreement = currentloanagreement;
 	}
+
+	private void setCurrentLoanAgreementPK(Object currentLoanAgreementPK) {
+		String json = genson.serialize(currentLoanAgreementPK);
+		EntityManager.stub.putStringState("GenerateLoanLetterAndAgreementModuleImpl.currentLoanAgreementPK", json);
+		//If we set currentLoanAgreementPK to null, the getter thinks this fields is not initialized, thus will read the old value from chain.
+		if (currentLoanAgreementPK != null)
+			this.currentLoanAgreementPK = currentLoanAgreementPK;
+		else
+			this.currentLoanAgreementPK = EntityManager.getGuid();
+	}
 	public LoanRequest getCurrentLoanRequest() {
-		return currentLoanRequest;
+		return EntityManager.getLoanRequestByPK(getCurrentLoanRequestPK());
+	}
+
+	private Object getCurrentLoanRequestPK() {
+		if (currentLoanRequestPK == null)
+			currentLoanRequestPK = genson.deserialize(EntityManager.stub.getStringState("GenerateLoanLetterAndAgreementModuleImpl.currentLoanRequestPK"), Integer.class);
+
+		return currentLoanRequestPK;
 	}	
 	
 	public void setCurrentLoanRequest(LoanRequest currentloanrequest) {
+		if (currentloanrequest != null)
+			setCurrentLoanRequestPK(currentloanrequest.getPK());
+		else
+			setCurrentLoanRequestPK(null);
 		this.currentLoanRequest = currentloanrequest;
 	}
+
+	private void setCurrentLoanRequestPK(Object currentLoanRequestPK) {
+		String json = genson.serialize(currentLoanRequestPK);
+		EntityManager.stub.putStringState("GenerateLoanLetterAndAgreementModuleImpl.currentLoanRequestPK", json);
+		//If we set currentLoanRequestPK to null, the getter thinks this fields is not initialized, thus will read the old value from chain.
+		if (currentLoanRequestPK != null)
+			this.currentLoanRequestPK = currentLoanRequestPK;
+		else
+			this.currentLoanRequestPK = EntityManager.getGuid();
+	}
 	public List<LoanRequest> getCurrentLoanRequests() {
+		if (currentLoanRequests == null)
+			currentLoanRequests = getCurrentLoanRequestsPKs().stream().map(EntityManager::getLoanRequestByPK).collect(Collectors.toList());
 		return currentLoanRequests;
+	}
+
+	private List<Object> getCurrentLoanRequestsPKs() {
+		if (currentLoanRequestsPKs == null)
+			currentLoanRequestsPKs = (List) GensonHelper.deserializeList(genson, EntityManager.stub.getStringState("GenerateLoanLetterAndAgreementModuleImpl.currentLoanRequestsPKs"), Integer.class);
+		return currentLoanRequestsPKs;
 	}	
 	
 	public void setCurrentLoanRequests(List<LoanRequest> currentloanrequests) {
+		setCurrentLoanRequestsPKs(currentloanrequests.stream().map(LoanRequest::getPK).collect(Collectors.toList()));
 		this.currentLoanRequests = currentloanrequests;
+	}
+
+	private void setCurrentLoanRequestsPKs(List<Object> currentLoanRequestsPKs) {
+		String json = genson.serialize(currentLoanRequestsPKs);
+		EntityManager.stub.putStringState("GenerateLoanLetterAndAgreementModuleImpl.currentLoanRequestsPKs", json);
+		this.currentLoanRequestsPKs = currentLoanRequestsPKs;
 	}
 	
 	/* invarints checking*/

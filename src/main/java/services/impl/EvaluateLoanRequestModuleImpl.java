@@ -18,6 +18,7 @@ import org.hyperledger.fabric.shim.*;
 import org.hyperledger.fabric.contract.annotation.*;
 import org.hyperledger.fabric.contract.*;
 import com.owlike.genson.Genson;
+import java.util.stream.*;
 
 @Contract
 public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule, Serializable, ContractInterface {
@@ -176,7 +177,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 		/* previous state in post-condition*/
 
 		/* check precondition */
-		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(currentLoanRequest.getRequestedCreditHistory()) == false)
+		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(getCurrentLoanRequest().getRequestedCreditHistory()) == false)
 		{ 
 			/* Logic here */
 			
@@ -187,7 +188,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 				throw new PostconditionException();
 			}
 			
-			; return currentLoanRequest.getRequestedCreditHistory();
+			; return getCurrentLoanRequest().getRequestedCreditHistory();
 		}
 		else
 		{
@@ -216,7 +217,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 		/* previous state in post-condition*/
 
 		/* check precondition */
-		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(currentLoanRequest.getRequestedCAHistory()) == false)
+		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(getCurrentLoanRequest().getRequestedCAHistory()) == false)
 		{ 
 			/* Logic here */
 			
@@ -227,7 +228,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 				throw new PostconditionException();
 			}
 			
-			; return currentLoanRequest.getRequestedCAHistory();
+			; return getCurrentLoanRequest().getRequestedCAHistory();
 		}
 		else
 		{
@@ -310,12 +311,12 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(loanterm) == false) 
 		{ 
 			/* Logic here */
-			currentLoanRequest.addAttachedLoanTerms(loanterm);
+			getCurrentLoanRequest().addAttachedLoanTerms(loanterm);
 			
 			
 			;
 			// post-condition checking
-			if (!(StandardOPs.includes(currentLoanRequest.getAttachedLoanTerms(), loanterm)
+			if (!(StandardOPs.includes(getCurrentLoanRequest().getAttachedLoanTerms(), loanterm)
 			 && 
 			EntityManager.saveModified(LoanRequest.class)
 			 &&
@@ -388,23 +389,61 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 	
 	
 	/* temp property for controller */
+	private Object currentLoanRequestPK;
 	private LoanRequest currentLoanRequest;
+	private List<Object> currentLoanRequestsPKs;
 	private List<LoanRequest> currentLoanRequests;
 			
 	/* all get and set functions for temp property*/
 	public LoanRequest getCurrentLoanRequest() {
-		return currentLoanRequest;
+		return EntityManager.getLoanRequestByPK(getCurrentLoanRequestPK());
+	}
+
+	private Object getCurrentLoanRequestPK() {
+		if (currentLoanRequestPK == null)
+			currentLoanRequestPK = genson.deserialize(EntityManager.stub.getStringState("EvaluateLoanRequestModuleImpl.currentLoanRequestPK"), Integer.class);
+
+		return currentLoanRequestPK;
 	}	
 	
 	public void setCurrentLoanRequest(LoanRequest currentloanrequest) {
+		if (currentloanrequest != null)
+			setCurrentLoanRequestPK(currentloanrequest.getPK());
+		else
+			setCurrentLoanRequestPK(null);
 		this.currentLoanRequest = currentloanrequest;
 	}
+
+	private void setCurrentLoanRequestPK(Object currentLoanRequestPK) {
+		String json = genson.serialize(currentLoanRequestPK);
+		EntityManager.stub.putStringState("EvaluateLoanRequestModuleImpl.currentLoanRequestPK", json);
+		//If we set currentLoanRequestPK to null, the getter thinks this fields is not initialized, thus will read the old value from chain.
+		if (currentLoanRequestPK != null)
+			this.currentLoanRequestPK = currentLoanRequestPK;
+		else
+			this.currentLoanRequestPK = EntityManager.getGuid();
+	}
 	public List<LoanRequest> getCurrentLoanRequests() {
+		if (currentLoanRequests == null)
+			currentLoanRequests = getCurrentLoanRequestsPKs().stream().map(EntityManager::getLoanRequestByPK).collect(Collectors.toList());
 		return currentLoanRequests;
+	}
+
+	private List<Object> getCurrentLoanRequestsPKs() {
+		if (currentLoanRequestsPKs == null)
+			currentLoanRequestsPKs = (List) GensonHelper.deserializeList(genson, EntityManager.stub.getStringState("EvaluateLoanRequestModuleImpl.currentLoanRequestsPKs"), Integer.class);
+		return currentLoanRequestsPKs;
 	}	
 	
 	public void setCurrentLoanRequests(List<LoanRequest> currentloanrequests) {
+		setCurrentLoanRequestsPKs(currentloanrequests.stream().map(LoanRequest::getPK).collect(Collectors.toList()));
 		this.currentLoanRequests = currentloanrequests;
+	}
+
+	private void setCurrentLoanRequestsPKs(List<Object> currentLoanRequestsPKs) {
+		String json = genson.serialize(currentLoanRequestsPKs);
+		EntityManager.stub.putStringState("EvaluateLoanRequestModuleImpl.currentLoanRequestsPKs", json);
+		this.currentLoanRequestsPKs = currentLoanRequestsPKs;
 	}
 	
 	/* invarints checking*/

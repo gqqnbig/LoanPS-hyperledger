@@ -18,6 +18,7 @@ import org.hyperledger.fabric.shim.*;
 import org.hyperledger.fabric.contract.annotation.*;
 import org.hyperledger.fabric.contract.*;
 import com.owlike.genson.Genson;
+import java.util.stream.*;
 
 @Contract
 public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedCreditReferencesModule, Serializable, ContractInterface {
@@ -43,9 +44,7 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 	
 	
 	/* Generate inject for sharing temp variables between use cases in system service */
-	public void refresh() {
-		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf(LoanProcessingSystemSystem.class).get(0);
-	}
+	
 	
 	/* Generate buiness logic according to functional requirement */
 	
@@ -84,7 +83,7 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 			this.setCurrentLoanRequests(rs);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(this.getCurrentLoanRequests() == rs
 			 && 
@@ -92,7 +91,7 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 				throw new PostconditionException();
 			}
 			
-			refresh(); return rs;
+			; return rs;
 		}
 		else
 		{
@@ -141,7 +140,7 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 			this.setCurrentLoanRequest(rs);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(this.getCurrentLoanRequest() == rs
 			 && 
@@ -149,7 +148,7 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 				throw new PostconditionException();
 			}
 			
-			refresh(); return rs;
+			; return rs;
 		}
 		else
 		{
@@ -184,7 +183,7 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 			this.getCurrentLoanRequest().setStatus(LoanRequestStatus.REFERENCESVALIDATED);
 			
 			
-			refresh();
+			;
 			// post-condition checking
 			if (!(this.getCurrentLoanRequest().getStatus() == LoanRequestStatus.REFERENCESVALIDATED
 			 && 
@@ -194,7 +193,7 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 			
 		
 			//return primitive type
-			refresh();				
+			;				
 			return true;
 		}
 		else
@@ -211,23 +210,61 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 	
 	
 	/* temp property for controller */
+	private Object currentLoanRequestPK;
 	private LoanRequest currentLoanRequest;
+	private List<Object> currentLoanRequestsPKs;
 	private List<LoanRequest> currentLoanRequests;
 			
 	/* all get and set functions for temp property*/
 	public LoanRequest getCurrentLoanRequest() {
-		return currentLoanRequest;
+		return EntityManager.getLoanRequestByPK(getCurrentLoanRequestPK());
+	}
+
+	private Object getCurrentLoanRequestPK() {
+		if (currentLoanRequestPK == null)
+			currentLoanRequestPK = genson.deserialize(EntityManager.stub.getStringState("EnterValidatedCreditReferencesModuleImpl.currentLoanRequestPK"), Integer.class);
+
+		return currentLoanRequestPK;
 	}	
 	
 	public void setCurrentLoanRequest(LoanRequest currentloanrequest) {
+		if (currentloanrequest != null)
+			setCurrentLoanRequestPK(currentloanrequest.getPK());
+		else
+			setCurrentLoanRequestPK(null);
 		this.currentLoanRequest = currentloanrequest;
 	}
+
+	private void setCurrentLoanRequestPK(Object currentLoanRequestPK) {
+		String json = genson.serialize(currentLoanRequestPK);
+		EntityManager.stub.putStringState("EnterValidatedCreditReferencesModuleImpl.currentLoanRequestPK", json);
+		//If we set currentLoanRequestPK to null, the getter thinks this fields is not initialized, thus will read the old value from chain.
+		if (currentLoanRequestPK != null)
+			this.currentLoanRequestPK = currentLoanRequestPK;
+		else
+			this.currentLoanRequestPK = EntityManager.getGuid();
+	}
 	public List<LoanRequest> getCurrentLoanRequests() {
+		if (currentLoanRequests == null)
+			currentLoanRequests = getCurrentLoanRequestsPKs().stream().map(EntityManager::getLoanRequestByPK).collect(Collectors.toList());
 		return currentLoanRequests;
+	}
+
+	private List<Object> getCurrentLoanRequestsPKs() {
+		if (currentLoanRequestsPKs == null)
+			currentLoanRequestsPKs = (List) GensonHelper.deserializeList(genson, EntityManager.stub.getStringState("EnterValidatedCreditReferencesModuleImpl.currentLoanRequestsPKs"), Integer.class);
+		return currentLoanRequestsPKs;
 	}	
 	
 	public void setCurrentLoanRequests(List<LoanRequest> currentloanrequests) {
+		setCurrentLoanRequestsPKs(currentloanrequests.stream().map(LoanRequest::getPK).collect(Collectors.toList()));
 		this.currentLoanRequests = currentloanrequests;
+	}
+
+	private void setCurrentLoanRequestsPKs(List<Object> currentLoanRequestsPKs) {
+		String json = genson.serialize(currentLoanRequestsPKs);
+		EntityManager.stub.putStringState("EnterValidatedCreditReferencesModuleImpl.currentLoanRequestsPKs", json);
+		this.currentLoanRequestsPKs = currentLoanRequestsPKs;
 	}
 	
 	/* invarints checking*/

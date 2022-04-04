@@ -174,8 +174,8 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			/* Logic here */
 			CreditHistory his = null;
 			his = (CreditHistory) EntityManager.createObject("CreditHistory");
-			his = services.getCreditHistory(currentLoanRequest.getSecurityNumber(), currentLoanRequest.getName());
-			currentLoanRequest.setRequestedCreditHistory(his);
+			his = services.getCreditHistory(getCurrentLoanRequest().getSecurityNumber(), getCurrentLoanRequest().getName());
+			getCurrentLoanRequest().setRequestedCreditHistory(his);
 			EntityManager.addObject("CreditHistory", his);
 			
 			
@@ -184,7 +184,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			if (!(true && 
 			true
 			 && 
-			currentLoanRequest.getRequestedCreditHistory() == his
+			getCurrentLoanRequest().getRequestedCreditHistory() == his
 			 && 
 			StandardOPs.includes(((List<CreditHistory>)EntityManager.getAllInstancesOf(CreditHistory.class)), his)
 			 && 
@@ -281,7 +281,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 		/* previous state in post-condition*/
 
 		/* check precondition */
-		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(currentLoanRequest.getRequestedCAHistory()) == false && StandardOPs.oclIsundefined(currentLoanRequest.getRequestedCreditHistory()) == false)
+		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(getCurrentLoanRequest().getRequestedCAHistory()) == false && StandardOPs.oclIsundefined(getCurrentLoanRequest().getRequestedCreditHistory()) == false)
 		{ 
 			/* Logic here */
 			this.getCurrentLoanRequest().setCreditScore(100);
@@ -317,15 +317,37 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 	
 	
 	/* temp property for controller */
+	private Object currentLoanRequestPK;
 	private LoanRequest currentLoanRequest;
 			
 	/* all get and set functions for temp property*/
 	public LoanRequest getCurrentLoanRequest() {
-		return currentLoanRequest;
+		return EntityManager.getLoanRequestByPK(getCurrentLoanRequestPK());
+	}
+
+	private Object getCurrentLoanRequestPK() {
+		if (currentLoanRequestPK == null)
+			currentLoanRequestPK = genson.deserialize(EntityManager.stub.getStringState("SubmitLoanRequestModuleImpl.currentLoanRequestPK"), Integer.class);
+
+		return currentLoanRequestPK;
 	}	
 	
 	public void setCurrentLoanRequest(LoanRequest currentloanrequest) {
+		if (currentloanrequest != null)
+			setCurrentLoanRequestPK(currentloanrequest.getPK());
+		else
+			setCurrentLoanRequestPK(null);
 		this.currentLoanRequest = currentloanrequest;
+	}
+
+	private void setCurrentLoanRequestPK(Object currentLoanRequestPK) {
+		String json = genson.serialize(currentLoanRequestPK);
+		EntityManager.stub.putStringState("SubmitLoanRequestModuleImpl.currentLoanRequestPK", json);
+		//If we set currentLoanRequestPK to null, the getter thinks this fields is not initialized, thus will read the old value from chain.
+		if (currentLoanRequestPK != null)
+			this.currentLoanRequestPK = currentLoanRequestPK;
+		else
+			this.currentLoanRequestPK = EntityManager.getGuid();
 	}
 	
 	/* invarints checking*/
