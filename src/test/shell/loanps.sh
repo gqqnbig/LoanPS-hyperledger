@@ -56,14 +56,30 @@ getBlockInfo() {
 
 testManageLoanTerm() {
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"ManageLoanTermCRUDServiceImpl:createLoanTerm","Args":["12","first"]}' || fail || return
+	docker stop "$(docker ps -n 1 --filter 'name=dev' --format '{{.ID}}')"
+
+	if pci -C mychannel -n loanps --waitForEvent -c '{"function":"ManageLoanTermCRUDServiceImpl:createLoanTerm","Args":["12","first"]}'; then
+		fail || return
+	fi
+
+	output=$(peer chaincode query -C mychannel -n loanps -c '{"function":"EvaluateLoanRequestModuleImpl:listAvaiableLoanTerm","Args":[]}')
+	assertNotEquals "[]" "$output"
+
 	output=$(peer chaincode query -C mychannel -n loanps -c '{"function":"ManageLoanTermCRUDServiceImpl:queryLoanTerm","Args":["12"]}')
 	assertContains "$output" "first"
 
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"ManageLoanTermCRUDServiceImpl:modifyLoanTerm","Args":["12","second"]}' || fail || return
+	docker stop "$(docker ps -n 1 --filter 'name=dev' --format '{{.ID}}')"
+
 	output=$(peer chaincode query -C mychannel -n loanps -c '{"function":"ManageLoanTermCRUDServiceImpl:queryLoanTerm","Args":["12"]}')
 	assertContains "$output" "second"
 
+	docker stop "$(docker ps -n 1 --filter 'name=dev' --format '{{.ID}}')"
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"ManageLoanTermCRUDServiceImpl:deleteLoanTerm","Args":["12"]}' || fail || return
+
+	if pci -C mychannel -n loanps --waitForEvent -c '{"function":"ManageLoanTermCRUDServiceImpl:deleteLoanTerm","Args":["12"]}'; then
+		fail || return
+	fi
 }
 
 testSubmitLoanRequest() {
