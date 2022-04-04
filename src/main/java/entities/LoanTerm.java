@@ -8,29 +8,33 @@ import java.util.Arrays;
 import java.time.LocalDate;
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import org.hyperledger.fabric.contract.annotation.*;
 
+@DataType()
 public class LoanTerm implements Serializable {
 	
 	/* all primary attributes */
-	private int ItemID;
-	private String Content;
+	@Property()
+	private int itemID;
+	@Property()
+	private String content;
 	
 	/* all references */
 	
 	/* all get and set functions */
 	public int getItemID() {
-		return ItemID;
+		return itemID;
 	}	
 	
 	public void setItemID(int itemid) {
-		this.ItemID = itemid;
+		this.itemID = itemid;
 	}
 	public String getContent() {
-		return Content;
+		return content;
 	}	
 	
 	public void setContent(String content) {
-		this.Content = content;
+		this.content = content;
 	}
 	
 	/* all functions for reference*/

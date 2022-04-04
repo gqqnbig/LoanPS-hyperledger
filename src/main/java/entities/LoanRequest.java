@@ -8,25 +8,42 @@ import java.util.Arrays;
 import java.time.LocalDate;
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import org.hyperledger.fabric.contract.annotation.*;
 
+@DataType()
 public class LoanRequest implements Serializable {
 	
 	/* all primary attributes */
-	private LoanRequestStatus Status;
-	private int RequestID;
-	private String Name;
-	private float LoanAmount;
-	private String LoanPurpose;
-	private float Income;
-	private int PhoneNumber;
-	private String PostalAddress;
-	private int ZipCode;
-	private String Email;
-	private String WorkReferences;
-	private String CreditReferences;
-	private int CheckingAccountNumber;
-	private int SecurityNumber;
-	private int CreditScore;
+	@Property()
+	private LoanRequestStatus status;
+	@Property()
+	private int requestID;
+	@Property()
+	private String name;
+	@Property()
+	private float loanAmount;
+	@Property()
+	private String loanPurpose;
+	@Property()
+	private float income;
+	@Property()
+	private int phoneNumber;
+	@Property()
+	private String postalAddress;
+	@Property()
+	private int zipCode;
+	@Property()
+	private String email;
+	@Property()
+	private String workReferences;
+	@Property()
+	private String creditReferences;
+	@Property()
+	private int checkingAccountNumber;
+	@Property()
+	private int securityNumber;
+	@Property()
+	private int creditScore;
 	
 	/* all references */
 	private Loan ApprovalLoan; 
@@ -38,109 +55,109 @@ public class LoanRequest implements Serializable {
 	
 	/* all get and set functions */
 	public LoanRequestStatus getStatus() {
-		return Status;
+		return status;
 	}	
 	
 	public void setStatus(LoanRequestStatus status) {
-		this.Status = status;
+		this.status = status;
 	}
 	public int getRequestID() {
-		return RequestID;
+		return requestID;
 	}	
 	
 	public void setRequestID(int requestid) {
-		this.RequestID = requestid;
+		this.requestID = requestid;
 	}
 	public String getName() {
-		return Name;
+		return name;
 	}	
 	
 	public void setName(String name) {
-		this.Name = name;
+		this.name = name;
 	}
 	public float getLoanAmount() {
-		return LoanAmount;
+		return loanAmount;
 	}	
 	
 	public void setLoanAmount(float loanamount) {
-		this.LoanAmount = loanamount;
+		this.loanAmount = loanamount;
 	}
 	public String getLoanPurpose() {
-		return LoanPurpose;
+		return loanPurpose;
 	}	
 	
 	public void setLoanPurpose(String loanpurpose) {
-		this.LoanPurpose = loanpurpose;
+		this.loanPurpose = loanpurpose;
 	}
 	public float getIncome() {
-		return Income;
+		return income;
 	}	
 	
 	public void setIncome(float income) {
-		this.Income = income;
+		this.income = income;
 	}
 	public int getPhoneNumber() {
-		return PhoneNumber;
+		return phoneNumber;
 	}	
 	
 	public void setPhoneNumber(int phonenumber) {
-		this.PhoneNumber = phonenumber;
+		this.phoneNumber = phonenumber;
 	}
 	public String getPostalAddress() {
-		return PostalAddress;
+		return postalAddress;
 	}	
 	
 	public void setPostalAddress(String postaladdress) {
-		this.PostalAddress = postaladdress;
+		this.postalAddress = postaladdress;
 	}
 	public int getZipCode() {
-		return ZipCode;
+		return zipCode;
 	}	
 	
 	public void setZipCode(int zipcode) {
-		this.ZipCode = zipcode;
+		this.zipCode = zipcode;
 	}
 	public String getEmail() {
-		return Email;
+		return email;
 	}	
 	
 	public void setEmail(String email) {
-		this.Email = email;
+		this.email = email;
 	}
 	public String getWorkReferences() {
-		return WorkReferences;
+		return workReferences;
 	}	
 	
 	public void setWorkReferences(String workreferences) {
-		this.WorkReferences = workreferences;
+		this.workReferences = workreferences;
 	}
 	public String getCreditReferences() {
-		return CreditReferences;
+		return creditReferences;
 	}	
 	
 	public void setCreditReferences(String creditreferences) {
-		this.CreditReferences = creditreferences;
+		this.creditReferences = creditreferences;
 	}
 	public int getCheckingAccountNumber() {
-		return CheckingAccountNumber;
+		return checkingAccountNumber;
 	}	
 	
 	public void setCheckingAccountNumber(int checkingaccountnumber) {
-		this.CheckingAccountNumber = checkingaccountnumber;
+		this.checkingAccountNumber = checkingaccountnumber;
 	}
 	public int getSecurityNumber() {
-		return SecurityNumber;
+		return securityNumber;
 	}	
 	
 	public void setSecurityNumber(int securitynumber) {
-		this.SecurityNumber = securitynumber;
+		this.securityNumber = securitynumber;
 	}
 	public int getCreditScore() {
-		return CreditScore;
+		return creditScore;
 	}	
 	
 	public void setCreditScore(int creditscore) {
-		this.CreditScore = creditscore;
+		this.creditScore = creditscore;
 	}
 	
 	/* all functions for reference*/
@@ -204,7 +221,7 @@ public class LoanRequest implements Serializable {
 	
 	public boolean LoanRequest_CreditScoreGreatAndEqualZero() {
 		
-		if (CreditScore >= 0) {
+		if (creditScore >= 0) {
 			return true;
 		} else {
 			return false;

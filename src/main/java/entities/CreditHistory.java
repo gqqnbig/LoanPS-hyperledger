@@ -8,29 +8,33 @@ import java.util.Arrays;
 import java.time.LocalDate;
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import org.hyperledger.fabric.contract.annotation.*;
 
+@DataType()
 public class CreditHistory implements Serializable {
 	
 	/* all primary attributes */
-	private float OutstandingDebt;
-	private int BadDebits;
+	@Property()
+	private float outstandingDebt;
+	@Property()
+	private int badDebits;
 	
 	/* all references */
 	
 	/* all get and set functions */
 	public float getOutstandingDebt() {
-		return OutstandingDebt;
+		return outstandingDebt;
 	}	
 	
 	public void setOutstandingDebt(float outstandingdebt) {
-		this.OutstandingDebt = outstandingdebt;
+		this.outstandingDebt = outstandingdebt;
 	}
 	public int getBadDebits() {
-		return BadDebits;
+		return badDebits;
 	}	
 	
 	public void setBadDebits(int baddebits) {
-		this.BadDebits = baddebits;
+		this.badDebits = baddebits;
 	}
 	
 	/* all functions for reference*/
@@ -39,7 +43,7 @@ public class CreditHistory implements Serializable {
 	/* invarints checking*/
 	public boolean CreditHistory_OutstandingDebtGreatAndEqualZero() {
 		
-		if (OutstandingDebt >= 0) {
+		if (outstandingDebt >= 0) {
 			return true;
 		} else {
 			return false;
@@ -48,7 +52,7 @@ public class CreditHistory implements Serializable {
 	
 	public boolean CreditHistory_BadDebitsGreatAndEqualZero() {
 		
-		if (BadDebits >= 0) {
+		if (badDebits >= 0) {
 			return true;
 		} else {
 			return false;

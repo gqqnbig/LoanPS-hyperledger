@@ -8,21 +8,24 @@ import java.util.Arrays;
 import java.time.LocalDate;
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import org.hyperledger.fabric.contract.annotation.*;
 
+@DataType()
 public class LoanAgreement implements Serializable {
 	
 	/* all primary attributes */
-	private String Content;
+	@Property()
+	private String content;
 	
 	/* all references */
 	
 	/* all get and set functions */
 	public String getContent() {
-		return Content;
+		return content;
 	}	
 	
 	public void setContent(String content) {
-		this.Content = content;
+		this.content = content;
 	}
 	
 	/* all functions for reference*/

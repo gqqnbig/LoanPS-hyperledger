@@ -8,19 +8,30 @@ import java.util.Arrays;
 import java.time.LocalDate;
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import org.hyperledger.fabric.contract.annotation.*;
 
+@DataType()
 public class Loan implements Serializable {
 	
 	/* all primary attributes */
-	private int LoanID;
-	private float RemainAmountToPay;
-	private LoanStatus Status;
-	private boolean IsPaidinFull;
-	private LocalDate StartDate;
-	private LocalDate EndDate;
-	private LocalDate CurrentOverDueDate;
-	private int RePaymentDays;
-	private float RepaymentAmount;
+	@Property()
+	private int loanID;
+	@Property()
+	private float remainAmountToPay;
+	@Property()
+	private LoanStatus status;
+	@Property()
+	private boolean isPaidinFull;
+	@Property()
+	private LocalDate startDate;
+	@Property()
+	private LocalDate endDate;
+	@Property()
+	private LocalDate currentOverDueDate;
+	@Property()
+	private int rePaymentDays;
+	@Property()
+	private float repaymentAmount;
 	
 	/* all references */
 	private LoanRequest ReferedLoanRequest; 
@@ -28,67 +39,67 @@ public class Loan implements Serializable {
 	
 	/* all get and set functions */
 	public int getLoanID() {
-		return LoanID;
+		return loanID;
 	}	
 	
 	public void setLoanID(int loanid) {
-		this.LoanID = loanid;
+		this.loanID = loanid;
 	}
 	public float getRemainAmountToPay() {
-		return RemainAmountToPay;
+		return remainAmountToPay;
 	}	
 	
 	public void setRemainAmountToPay(float remainamounttopay) {
-		this.RemainAmountToPay = remainamounttopay;
+		this.remainAmountToPay = remainamounttopay;
 	}
 	public LoanStatus getStatus() {
-		return Status;
+		return status;
 	}	
 	
 	public void setStatus(LoanStatus status) {
-		this.Status = status;
+		this.status = status;
 	}
 	public boolean getIsPaidinFull() {
-		return IsPaidinFull;
+		return isPaidinFull;
 	}	
 	
 	public void setIsPaidinFull(boolean ispaidinfull) {
-		this.IsPaidinFull = ispaidinfull;
+		this.isPaidinFull = ispaidinfull;
 	}
 	public LocalDate getStartDate() {
-		return StartDate;
+		return startDate;
 	}	
 	
 	public void setStartDate(LocalDate startdate) {
-		this.StartDate = startdate;
+		this.startDate = startdate;
 	}
 	public LocalDate getEndDate() {
-		return EndDate;
+		return endDate;
 	}	
 	
 	public void setEndDate(LocalDate enddate) {
-		this.EndDate = enddate;
+		this.endDate = enddate;
 	}
 	public LocalDate getCurrentOverDueDate() {
-		return CurrentOverDueDate;
+		return currentOverDueDate;
 	}	
 	
 	public void setCurrentOverDueDate(LocalDate currentoverduedate) {
-		this.CurrentOverDueDate = currentoverduedate;
+		this.currentOverDueDate = currentoverduedate;
 	}
 	public int getRePaymentDays() {
-		return RePaymentDays;
+		return rePaymentDays;
 	}	
 	
 	public void setRePaymentDays(int repaymentdays) {
-		this.RePaymentDays = repaymentdays;
+		this.rePaymentDays = repaymentdays;
 	}
 	public float getRepaymentAmount() {
-		return RepaymentAmount;
+		return repaymentAmount;
 	}	
 	
 	public void setRepaymentAmount(float repaymentamount) {
-		this.RepaymentAmount = repaymentamount;
+		this.repaymentAmount = repaymentamount;
 	}
 	
 	/* all functions for reference*/
@@ -120,7 +131,7 @@ public class Loan implements Serializable {
 	
 	public boolean Loan_RemainAmountToPayGreatAndEqualZero() {
 		
-		if (RemainAmountToPay >= 0) {
+		if (remainAmountToPay >= 0) {
 			return true;
 		} else {
 			return false;
@@ -129,7 +140,7 @@ public class Loan implements Serializable {
 	
 	public boolean Loan_RepaymentAmountGreatAndEqualZero() {
 		
-		if (RepaymentAmount >= 0) {
+		if (repaymentAmount >= 0) {
 			return true;
 		} else {
 			return false;
@@ -138,7 +149,7 @@ public class Loan implements Serializable {
 	
 	public boolean Loan_RePaymentDaysGreatAndEqualZero() {
 		
-		if (RePaymentDays >= 0) {
+		if (rePaymentDays >= 0) {
 			return true;
 		} else {
 			return false;

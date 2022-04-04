@@ -8,29 +8,33 @@ import java.util.Arrays;
 import java.time.LocalDate;
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import org.hyperledger.fabric.contract.annotation.*;
 
+@DataType()
 public class CheckingAccount implements Serializable {
 	
 	/* all primary attributes */
-	private float Balance;
-	private CheckingAccountStatus Status;
+	@Property()
+	private float balance;
+	@Property()
+	private CheckingAccountStatus status;
 	
 	/* all references */
 	
 	/* all get and set functions */
 	public float getBalance() {
-		return Balance;
+		return balance;
 	}	
 	
 	public void setBalance(float balance) {
-		this.Balance = balance;
+		this.balance = balance;
 	}
 	public CheckingAccountStatus getStatus() {
-		return Status;
+		return status;
 	}	
 	
 	public void setStatus(CheckingAccountStatus status) {
-		this.Status = status;
+		this.status = status;
 	}
 	
 	/* all functions for reference*/
@@ -39,7 +43,7 @@ public class CheckingAccount implements Serializable {
 	/* invarints checking*/
 	public boolean CheckingAccount_BalanceGreatAndEqualZero() {
 		
-		if (Balance >= 0) {
+		if (balance >= 0) {
 			return true;
 		} else {
 			return false;

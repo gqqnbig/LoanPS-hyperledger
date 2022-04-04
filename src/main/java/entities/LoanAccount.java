@@ -8,37 +8,42 @@ import java.util.Arrays;
 import java.time.LocalDate;
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import org.hyperledger.fabric.contract.annotation.*;
 
+@DataType()
 public class LoanAccount implements Serializable {
 	
 	/* all primary attributes */
-	private int LoanAccountID;
-	private float Balance;
-	private LoanAccountStatus Status;
+	@Property()
+	private int loanAccountID;
+	@Property()
+	private float balance;
+	@Property()
+	private LoanAccountStatus status;
 	
 	/* all references */
 	
 	/* all get and set functions */
 	public int getLoanAccountID() {
-		return LoanAccountID;
+		return loanAccountID;
 	}	
 	
 	public void setLoanAccountID(int loanaccountid) {
-		this.LoanAccountID = loanaccountid;
+		this.loanAccountID = loanaccountid;
 	}
 	public float getBalance() {
-		return Balance;
+		return balance;
 	}	
 	
 	public void setBalance(float balance) {
-		this.Balance = balance;
+		this.balance = balance;
 	}
 	public LoanAccountStatus getStatus() {
-		return Status;
+		return status;
 	}	
 	
 	public void setStatus(LoanAccountStatus status) {
-		this.Status = status;
+		this.status = status;
 	}
 	
 	/* all functions for reference*/
@@ -56,7 +61,7 @@ public class LoanAccount implements Serializable {
 	
 	public boolean LoanAccount_BalanceGreatAndEqualZero() {
 		
-		if (Balance >= 0) {
+		if (balance >= 0) {
 			return true;
 		} else {
 			return false;
