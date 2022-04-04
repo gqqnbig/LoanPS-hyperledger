@@ -1,0 +1,9 @@
+package entities;
+
+public enum LoanRequestStatus {
+	SUBMITTED,
+	REFERENCESVALIDATED,
+	APPROVED,
+	READYFORREVIEW,
+	INCOMPLETEINFORMATION
+}
