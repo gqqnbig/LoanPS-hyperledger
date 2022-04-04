@@ -119,7 +119,23 @@ testSubmitLoanRequest() {
 
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EvaluateLoanRequestModuleImpl:addLoanTerm","Args":["12"]}' || fail || return
 
+	output=$(pci -C mychannel -n loanps --waitForEvent -c '{"function":"GenerateLoanLetterAndAgreementModuleImpl:listApprovalRequest","Args":[]}' 2>&1 |
+		sed -n -r 's/.+status:200[[:space:]]+payload:"(.+)"[[:space:]]*$/\1/p')
+	assertEquals "[]" "$output"
+
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EvaluateLoanRequestModuleImpl:approveLoanRequest","Args":[]}' || fail || return
+
+	output=$(pci -C mychannel -n loanps --waitForEvent -c '{"function":"GenerateLoanLetterAndAgreementModuleImpl:listApprovalRequest","Args":[]}' 2>&1 |
+		sed -n -r 's/.+status:200[[:space:]]+payload:"(.+)"[[:space:]]*$/\1/p')
+	assertNotEquals "[]" "$output"
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"GenerateLoanLetterAndAgreementModuleImpl:genereateApprovalLetter","Args":["1"]}' || fail || return
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"GenerateLoanLetterAndAgreementModuleImpl:emailToAppliant","Args":[]}' || fail || return
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"GenerateLoanLetterAndAgreementModuleImpl:generateLoanAgreement","Args":[]}' || fail || return
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"GenerateLoanLetterAndAgreementModuleImpl:printLoanAgreement","Args":["1"]}' || fail || return
 }
 
 source shunit2
