@@ -522,5 +522,85 @@ public class EntityManager {
 		AllInstance.put("LoanRequest", LoanRequestInstances);
 		AllInstance.put("LoanTerm", LoanTermInstances);
 	}
+
+	public static ApprovalLetter getApprovalLetterByPK(Object pk) {
+		if (pk == null)
+			return null;
+		for (var i : EntityManager.getAllInstancesOf(ApprovalLetter.class)) {
+			if (Objects.equals(i.getPK(), pk))
+				return i;
+		}
+		return null;
+	}
+
+	public static CheckingAccount getCheckingAccountByPK(Object pk) {
+		if (pk == null)
+			return null;
+		for (var i : EntityManager.getAllInstancesOf(CheckingAccount.class)) {
+			if (Objects.equals(i.getPK(), pk))
+				return i;
+		}
+		return null;
+	}
+
+	public static CreditHistory getCreditHistoryByPK(Object pk) {
+		if (pk == null)
+			return null;
+		for (var i : EntityManager.getAllInstancesOf(CreditHistory.class)) {
+			if (Objects.equals(i.getPK(), pk))
+				return i;
+		}
+		return null;
+	}
+
+	public static Loan getLoanByPK(Object pk) {
+		if (pk == null)
+			return null;
+		for (var i : EntityManager.getAllInstancesOf(Loan.class)) {
+			if (Objects.equals(i.getPK(), pk))
+				return i;
+		}
+		return null;
+	}
+
+	public static LoanAccount getLoanAccountByPK(Object pk) {
+		if (pk == null)
+			return null;
+		for (var i : EntityManager.getAllInstancesOf(LoanAccount.class)) {
+			if (Objects.equals(i.getPK(), pk))
+				return i;
+		}
+		return null;
+	}
+
+	public static LoanAgreement getLoanAgreementByPK(Object pk) {
+		if (pk == null)
+			return null;
+		for (var i : EntityManager.getAllInstancesOf(LoanAgreement.class)) {
+			if (Objects.equals(i.getPK(), pk))
+				return i;
+		}
+		return null;
+	}
+
+	public static LoanRequest getLoanRequestByPK(Object pk) {
+		if (pk == null)
+			return null;
+		for (var i : EntityManager.getAllInstancesOf(LoanRequest.class)) {
+			if (Objects.equals(i.getPK(), pk))
+				return i;
+		}
+		return null;
+	}
+
+	public static LoanTerm getLoanTermByPK(Object pk) {
+		if (pk == null)
+			return null;
+		for (var i : EntityManager.getAllInstancesOf(LoanTerm.class)) {
+			if (Objects.equals(i.getPK(), pk))
+				return i;
+		}
+		return null;
+	}
 }
 
