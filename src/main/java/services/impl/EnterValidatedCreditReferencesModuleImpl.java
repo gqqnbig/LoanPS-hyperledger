@@ -186,7 +186,9 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 			;
 			// post-condition checking
 			if (!(this.getCurrentLoanRequest().getStatus() == LoanRequestStatus.REFERENCESVALIDATED
-			 && 
+			 &&
+			EntityManager.saveModified(LoanRequest.class)
+			 &&
 			true)) {
 				throw new PostconditionException();
 			}
