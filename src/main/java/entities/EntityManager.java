@@ -15,7 +15,14 @@ import java.io.ObjectOutputStream;
 import java.io.FileInputStream;
 import java.io.File;
 
+import org.hyperledger.fabric.shim.ChaincodeStub;
+import com.owlike.genson.Genson;
+
 public class EntityManager {
+
+	private static final Genson genson = new Genson();
+
+	public static ChaincodeStub stub;
 
 	private static Map<String, List> AllInstance = new HashMap<String, List>();
 	
@@ -198,7 +205,13 @@ public class EntityManager {
 	}
 	
 	public static boolean addLoanRequestObject(LoanRequest o) {
-		return LoanRequestInstances.add(o);
+		List<LoanRequest> list = loadList(LoanRequest.class);
+		if (list.add(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("LoanRequest", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean addLoanRequestObjects(List<LoanRequest> os) {
@@ -206,7 +219,13 @@ public class EntityManager {
 	}
 	
 	public static boolean deleteLoanRequestObject(LoanRequest o) {
-		return LoanRequestInstances.remove(o);
+		List<LoanRequest> list = loadList(LoanRequest.class);
+		if (list.remove(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("LoanRequest", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean deleteLoanRequestObjects(List<LoanRequest> os) {
@@ -218,7 +237,13 @@ public class EntityManager {
 	}
 	
 	public static boolean addLoanObject(Loan o) {
-		return LoanInstances.add(o);
+		List<Loan> list = loadList(Loan.class);
+		if (list.add(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("Loan", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean addLoanObjects(List<Loan> os) {
@@ -226,7 +251,13 @@ public class EntityManager {
 	}
 	
 	public static boolean deleteLoanObject(Loan o) {
-		return LoanInstances.remove(o);
+		List<Loan> list = loadList(Loan.class);
+		if (list.remove(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("Loan", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean deleteLoanObjects(List<Loan> os) {
@@ -238,7 +269,13 @@ public class EntityManager {
 	}
 	
 	public static boolean addLoanTermObject(LoanTerm o) {
-		return LoanTermInstances.add(o);
+		List<LoanTerm> list = loadList(LoanTerm.class);
+		if (list.add(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("LoanTerm", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean addLoanTermObjects(List<LoanTerm> os) {
@@ -246,7 +283,13 @@ public class EntityManager {
 	}
 	
 	public static boolean deleteLoanTermObject(LoanTerm o) {
-		return LoanTermInstances.remove(o);
+		List<LoanTerm> list = loadList(LoanTerm.class);
+		if (list.remove(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("LoanTerm", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean deleteLoanTermObjects(List<LoanTerm> os) {
@@ -258,7 +301,13 @@ public class EntityManager {
 	}
 	
 	public static boolean addCheckingAccountObject(CheckingAccount o) {
-		return CheckingAccountInstances.add(o);
+		List<CheckingAccount> list = loadList(CheckingAccount.class);
+		if (list.add(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("CheckingAccount", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean addCheckingAccountObjects(List<CheckingAccount> os) {
@@ -266,7 +315,13 @@ public class EntityManager {
 	}
 	
 	public static boolean deleteCheckingAccountObject(CheckingAccount o) {
-		return CheckingAccountInstances.remove(o);
+		List<CheckingAccount> list = loadList(CheckingAccount.class);
+		if (list.remove(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("CheckingAccount", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean deleteCheckingAccountObjects(List<CheckingAccount> os) {
@@ -278,7 +333,13 @@ public class EntityManager {
 	}
 	
 	public static boolean addCreditHistoryObject(CreditHistory o) {
-		return CreditHistoryInstances.add(o);
+		List<CreditHistory> list = loadList(CreditHistory.class);
+		if (list.add(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("CreditHistory", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean addCreditHistoryObjects(List<CreditHistory> os) {
@@ -286,7 +347,13 @@ public class EntityManager {
 	}
 	
 	public static boolean deleteCreditHistoryObject(CreditHistory o) {
-		return CreditHistoryInstances.remove(o);
+		List<CreditHistory> list = loadList(CreditHistory.class);
+		if (list.remove(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("CreditHistory", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean deleteCreditHistoryObjects(List<CreditHistory> os) {
@@ -298,7 +365,13 @@ public class EntityManager {
 	}
 	
 	public static boolean addLoanAccountObject(LoanAccount o) {
-		return LoanAccountInstances.add(o);
+		List<LoanAccount> list = loadList(LoanAccount.class);
+		if (list.add(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("LoanAccount", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean addLoanAccountObjects(List<LoanAccount> os) {
@@ -306,7 +379,13 @@ public class EntityManager {
 	}
 	
 	public static boolean deleteLoanAccountObject(LoanAccount o) {
-		return LoanAccountInstances.remove(o);
+		List<LoanAccount> list = loadList(LoanAccount.class);
+		if (list.remove(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("LoanAccount", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean deleteLoanAccountObjects(List<LoanAccount> os) {
@@ -318,7 +397,13 @@ public class EntityManager {
 	}
 	
 	public static boolean addApprovalLetterObject(ApprovalLetter o) {
-		return ApprovalLetterInstances.add(o);
+		List<ApprovalLetter> list = loadList(ApprovalLetter.class);
+		if (list.add(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("ApprovalLetter", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean addApprovalLetterObjects(List<ApprovalLetter> os) {
@@ -326,7 +411,13 @@ public class EntityManager {
 	}
 	
 	public static boolean deleteApprovalLetterObject(ApprovalLetter o) {
-		return ApprovalLetterInstances.remove(o);
+		List<ApprovalLetter> list = loadList(ApprovalLetter.class);
+		if (list.remove(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("ApprovalLetter", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean deleteApprovalLetterObjects(List<ApprovalLetter> os) {
@@ -338,7 +429,13 @@ public class EntityManager {
 	}
 	
 	public static boolean addLoanAgreementObject(LoanAgreement o) {
-		return LoanAgreementInstances.add(o);
+		List<LoanAgreement> list = loadList(LoanAgreement.class);
+		if (list.add(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("LoanAgreement", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean addLoanAgreementObjects(List<LoanAgreement> os) {
@@ -346,12 +443,38 @@ public class EntityManager {
 	}
 	
 	public static boolean deleteLoanAgreementObject(LoanAgreement o) {
-		return LoanAgreementInstances.remove(o);
+		List<LoanAgreement> list = loadList(LoanAgreement.class);
+		if (list.remove(o)) {
+			String json = genson.serialize(list);
+			stub.putStringState("LoanAgreement", json);
+			return true;
+		} else
+			return false;
 	}
 	
 	public static boolean deleteLoanAgreementObjects(List<LoanAgreement> os) {
 		return LoanAgreementInstances.removeAll(os);
 	}
   
+
+	public static <T> List<T> getAllInstancesOf(Class<T> clazz) {
+		List<T> list = loadList(clazz);
+		return list;
+	}
+
+	private static <T> List<T> loadList(Class<T> clazz) {
+		String key = clazz.getSimpleName();
+		List<T> list = AllInstance.get(key);
+		if (list == null || list.size() == 0) {
+			String json = stub.getStringState(key);
+			System.out.printf("loadList %s: %s\n", key, json);
+			if (json != null && Objects.equals(json, "") == false)
+				list = GensonHelper.deserializeList(genson, json, clazz);
+			else
+				list = new LinkedList<>();
+			AllInstance.put(key, list);
+		}
+		return list;
+	}
 }
 
