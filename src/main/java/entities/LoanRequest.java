@@ -201,8 +201,12 @@ public class LoanRequest implements Serializable {
 	
 	public void setRequestedCAHistory(CheckingAccount checkingaccount) {
 		this.RequestedCAHistory = checkingaccount;
-		this.RequestedCAHistoryPK = checkingaccount.getPK();
-	}			
+		if (checkingaccount != null)
+			this.RequestedCAHistoryPK = checkingaccount.getPK();
+		else
+			this.RequestedCAHistoryPK = null;
+	}
+
 	@JsonIgnore
 	public CreditHistory getRequestedCreditHistory() {
 		if (RequestedCreditHistory == null)
@@ -212,8 +216,12 @@ public class LoanRequest implements Serializable {
 	
 	public void setRequestedCreditHistory(CreditHistory credithistory) {
 		this.RequestedCreditHistory = credithistory;
-		this.RequestedCreditHistoryPK = credithistory.getPK();
-	}			
+		if (credithistory != null)
+			this.RequestedCreditHistoryPK = credithistory.getPK();
+		else
+			this.RequestedCreditHistoryPK = null;
+	}
+
 	@JsonIgnore
 	public ApprovalLetter getAttachedApprovalLetter() {
 		if (AttachedApprovalLetter == null)
@@ -223,8 +231,12 @@ public class LoanRequest implements Serializable {
 	
 	public void setAttachedApprovalLetter(ApprovalLetter approvalletter) {
 		this.AttachedApprovalLetter = approvalletter;
-		this.AttachedApprovalLetterPK = approvalletter.getPK();
-	}			
+		if (approvalletter != null)
+			this.AttachedApprovalLetterPK = approvalletter.getPK();
+		else
+			this.AttachedApprovalLetterPK = null;
+	}
+
 	@JsonIgnore
 	public LoanAgreement getAttachedLoanAgreement() {
 		if (AttachedLoanAgreement == null)
