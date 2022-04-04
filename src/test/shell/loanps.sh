@@ -74,6 +74,9 @@ testSubmitLoanRequest() {
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"SubmitLoanRequestModuleImpl:calculateScore","Args":[]}' || fail || return
 
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EnterValidatedCreditReferencesModuleImpl:listSubmitedLoanRequest","Args":[]}' || fail || return
+
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EnterValidatedCreditReferencesModuleImpl:chooseLoanRequest","Args":["1"]}' || fail || return
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EnterValidatedCreditReferencesModuleImpl:markRequestValid","Args":[]}' || fail || return
 }
 
 source shunit2
