@@ -537,7 +537,7 @@ public class EntityManager {
 		if (pk == null)
 			return null;
 		for (var i : EntityManager.getAllInstancesOf(CheckingAccount.class)) {
-			if (Objects.equals(i.getPK(), pk))
+			if (i != null && Objects.equals(i.getPK(), pk))
 				return i;
 		}
 		return null;
@@ -547,7 +547,7 @@ public class EntityManager {
 		if (pk == null)
 			return null;
 		for (var i : EntityManager.getAllInstancesOf(CreditHistory.class)) {
-			if (Objects.equals(i.getPK(), pk))
+			if (i != null && Objects.equals(i.getPK(), pk))
 				return i;
 		}
 		return null;
