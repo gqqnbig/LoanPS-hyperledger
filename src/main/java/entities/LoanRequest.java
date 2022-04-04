@@ -56,6 +56,9 @@ public class LoanRequest implements Serializable {
 	private Loan ApprovalLoan; 
 	@JsonProperty
 	private Object RequestedCAHistoryPK;
+	/**
+	 * CA means CheckingAccount.
+	 */
 	private CheckingAccount RequestedCAHistory; 
 	@JsonProperty
 	private Object RequestedCreditHistoryPK;
