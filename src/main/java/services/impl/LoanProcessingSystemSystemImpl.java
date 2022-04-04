@@ -19,9 +19,11 @@ import org.hyperledger.fabric.contract.annotation.*;
 import org.hyperledger.fabric.contract.*;
 import converters.*;
 import com.owlike.genson.GensonBuilder;
+import com.owlike.genson.Genson;
 
 @Contract
 public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSystem, Serializable, ContractInterface {
+	private static final Genson genson = new Genson();
 	
 	
 	public static Map<String, List<String>> opINVRelatedEntity = new HashMap<String, List<String>>();
