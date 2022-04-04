@@ -255,7 +255,9 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 			this.getCurrentLoanRequest().getAttachedLoanAgreement() == la
 			 && 
 			StandardOPs.includes(((List<LoanAgreement>)EntityManager.getAllInstancesOf(LoanAgreement.class)), la)
-			 && 
+			 &&
+			EntityManager.saveModified(LoanRequest.class)
+			 &&
 			true)) {
 				throw new PostconditionException();
 			}
