@@ -38,6 +38,20 @@ public class TestHelper implements ContractInterface {
 		EntityManager.saveModified(LoanRequest.class);
 	}
 
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public void createLoanAccount(final Context ctx, int id, float balance, String status) {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var loanAccount = EntityManager.createLoanAccountObject();
+		loanAccount.setLoanAccountID(id);
+		loanAccount.setBalance(balance);
+		loanAccount.setStatus(genson.deserialize(status, LoanAccountStatus.class));
+
+		EntityManager.addLoanAccountObject(loanAccount);
+		
+	}
+
 	private Object currentLoanRequestPK;
 	private LoanRequest currentLoanRequest;
 
