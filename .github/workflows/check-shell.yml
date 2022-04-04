@@ -41,7 +41,7 @@ jobs:
             if grep --quiet -P '(source|\.) .*\bshunit2$' "$file"; then
               # grep -z will append a zero byte at the end, so trim it.
               m1=$(grep -z -o -P '^#!.+\bbash.+?-[^e\s]*e' "$file" | tr -d '\0')
-              m2=$(grep -P 'set.+?(-[^e\s]*e|-o errexit)' "$file")
+              m2=$(grep -P '\bset.+?(-[^e\s]*e|-o errexit)' "$file")
               if [[ $m1 ]] || [[ $m2 ]]; then
                 echo "shunit2 script does not support errexit (-e):" >&2
                 echo "Found $m1$m2 in $file" >&2
