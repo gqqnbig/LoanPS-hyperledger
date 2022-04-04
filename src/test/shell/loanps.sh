@@ -55,6 +55,10 @@ getBlockInfo() {
 }
 
 testSubmitLoanRequest() {
+	if pci -C mychannel -n loanps --waitForEvent -c '{"function":"EnterValidatedCreditReferencesModuleImpl:listSubmitedLoanRequest","Args":[]}'; then
+		fail "When there are not loans, this method is expected to fail rather than returning empty array." || return
+	fi
+
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"SubmitLoanRequestModuleImpl:enterLoanInformation","Args":["1","1","1","1","1","1","1","1","1","1","1","1","1"]}' || fail || return
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"SubmitLoanRequestModuleImpl:creditRequest","Args":[]}' || fail || return
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"SubmitLoanRequestModuleImpl:accountStatusRequest","Args":[]}' || fail || return
@@ -69,6 +73,7 @@ testSubmitLoanRequest() {
 
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"SubmitLoanRequestModuleImpl:calculateScore","Args":[]}' || fail || return
 
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"EnterValidatedCreditReferencesModuleImpl:listSubmitedLoanRequest","Args":[]}' || fail || return
 }
 
 source shunit2
