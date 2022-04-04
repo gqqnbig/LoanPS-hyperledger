@@ -495,5 +495,32 @@ public class EntityManager {
 			throw new RuntimeException();
 		}
 	}
+
+	public static ChaincodeStub getStub() {
+		return stub;
+	}
+
+	public static void setStub(ChaincodeStub stub) {
+		EntityManager.stub = stub;
+		random = null;
+
+		ApprovalLetterInstances = new LinkedList<>();
+		CheckingAccountInstances = new LinkedList<>();
+		CreditHistoryInstances = new LinkedList<>();
+		LoanAccountInstances = new LinkedList<>();
+		LoanAgreementInstances = new LinkedList<>();
+		LoanInstances = new LinkedList<>();
+		LoanRequestInstances = new LinkedList<>();
+		LoanTermInstances = new LinkedList<>();
+
+		AllInstance.put("ApprovalLetter", ApprovalLetterInstances);
+		AllInstance.put("CheckingAccount", CheckingAccountInstances);
+		AllInstance.put("CreditHistory", CreditHistoryInstances);
+		AllInstance.put("LoanAccount", LoanAccountInstances);
+		AllInstance.put("LoanAgreement", LoanAgreementInstances);
+		AllInstance.put("Loan", LoanInstances);
+		AllInstance.put("LoanRequest", LoanRequestInstances);
+		AllInstance.put("LoanTerm", LoanTermInstances);
+	}
 }
 
