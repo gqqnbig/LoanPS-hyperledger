@@ -160,7 +160,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false) 
 		{ 
 			/* Logic here */
-			services.sendEmail(CurrentLoanRequest.getEmail(), CurrentLoanRequest.getName(), "Your Loan Request was approved");
+			services.sendEmail(currentLoanRequest.getEmail(), currentLoanRequest.getName(), "Your Loan Request was approved");
 			
 			
 			refresh();
@@ -238,7 +238,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false) 
 		{ 
 			/* Logic here */
-			services.print(CurrentLoanRequest.getAttachedLoanAgreement().getContent(), number);
+			services.print(currentLoanRequest.getAttachedLoanAgreement().getContent(), number);
 			
 			
 			refresh();
@@ -265,39 +265,39 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 	
 	
 	/* temp property for controller */
-	private ApprovalLetter CurrentApprovalLetter;
-	private LoanAgreement CurrentLoanAgreement;
-	private LoanRequest CurrentLoanRequest;
-	private List<LoanRequest> CurrentLoanRequests;
+	private ApprovalLetter currentApprovalLetter;
+	private LoanAgreement currentLoanAgreement;
+	private LoanRequest currentLoanRequest;
+	private List<LoanRequest> currentLoanRequests;
 			
 	/* all get and set functions for temp property*/
 	public ApprovalLetter getCurrentApprovalLetter() {
-		return CurrentApprovalLetter;
+		return currentApprovalLetter;
 	}	
 	
 	public void setCurrentApprovalLetter(ApprovalLetter currentapprovalletter) {
-		this.CurrentApprovalLetter = currentapprovalletter;
+		this.currentApprovalLetter = currentapprovalletter;
 	}
 	public LoanAgreement getCurrentLoanAgreement() {
-		return CurrentLoanAgreement;
+		return currentLoanAgreement;
 	}	
 	
 	public void setCurrentLoanAgreement(LoanAgreement currentloanagreement) {
-		this.CurrentLoanAgreement = currentloanagreement;
+		this.currentLoanAgreement = currentloanagreement;
 	}
 	public LoanRequest getCurrentLoanRequest() {
-		return CurrentLoanRequest;
+		return currentLoanRequest;
 	}	
 	
 	public void setCurrentLoanRequest(LoanRequest currentloanrequest) {
-		this.CurrentLoanRequest = currentloanrequest;
+		this.currentLoanRequest = currentloanrequest;
 	}
 	public List<LoanRequest> getCurrentLoanRequests() {
-		return CurrentLoanRequests;
+		return currentLoanRequests;
 	}	
 	
 	public void setCurrentLoanRequests(List<LoanRequest> currentloanrequests) {
-		this.CurrentLoanRequests = currentloanrequests;
+		this.currentLoanRequests = currentloanrequests;
 	}
 	
 	/* invarints checking*/

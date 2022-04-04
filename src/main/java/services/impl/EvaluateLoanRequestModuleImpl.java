@@ -142,7 +142,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 		/* previous state in post-condition*/
 
 		/* check precondition */
-		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(CurrentLoanRequest.getRequestedCreditHistory()) == false) 
+		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(currentLoanRequest.getRequestedCreditHistory()) == false)
 		{ 
 			/* Logic here */
 			
@@ -153,7 +153,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 				throw new PostconditionException();
 			}
 			
-			refresh(); return CurrentLoanRequest.getRequestedCreditHistory();
+			refresh(); return currentLoanRequest.getRequestedCreditHistory();
 		}
 		else
 		{
@@ -172,7 +172,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 		/* previous state in post-condition*/
 
 		/* check precondition */
-		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(CurrentLoanRequest.getRequestedCAHistory()) == false) 
+		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(currentLoanRequest.getRequestedCAHistory()) == false)
 		{ 
 			/* Logic here */
 			
@@ -183,7 +183,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 				throw new PostconditionException();
 			}
 			
-			refresh(); return CurrentLoanRequest.getRequestedCAHistory();
+			refresh(); return currentLoanRequest.getRequestedCAHistory();
 		}
 		else
 		{
@@ -246,12 +246,12 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(loanterm) == false) 
 		{ 
 			/* Logic here */
-			CurrentLoanRequest.addAttachedLoanTerms(loanterm);
+			currentLoanRequest.addAttachedLoanTerms(loanterm);
 			
 			
 			refresh();
 			// post-condition checking
-			if (!(StandardOPs.includes(CurrentLoanRequest.getAttachedLoanTerms(), loanterm)
+			if (!(StandardOPs.includes(currentLoanRequest.getAttachedLoanTerms(), loanterm)
 			 && 
 			true)) {
 				throw new PostconditionException();
@@ -312,23 +312,23 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 	
 	
 	/* temp property for controller */
-	private LoanRequest CurrentLoanRequest;
-	private List<LoanRequest> CurrentLoanRequests;
+	private LoanRequest currentLoanRequest;
+	private List<LoanRequest> currentLoanRequests;
 			
 	/* all get and set functions for temp property*/
 	public LoanRequest getCurrentLoanRequest() {
-		return CurrentLoanRequest;
+		return currentLoanRequest;
 	}	
 	
 	public void setCurrentLoanRequest(LoanRequest currentloanrequest) {
-		this.CurrentLoanRequest = currentloanrequest;
+		this.currentLoanRequest = currentloanrequest;
 	}
 	public List<LoanRequest> getCurrentLoanRequests() {
-		return CurrentLoanRequests;
+		return currentLoanRequests;
 	}	
 	
 	public void setCurrentLoanRequests(List<LoanRequest> currentloanrequests) {
-		this.CurrentLoanRequests = currentloanrequests;
+		this.currentLoanRequests = currentloanrequests;
 	}
 	
 	/* invarints checking*/

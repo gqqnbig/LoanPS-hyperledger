@@ -175,23 +175,23 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 	
 	
 	/* temp property for controller */
-	private LoanRequest CurrentLoanRequest;
-	private List<LoanRequest> CurrentLoanRequests;
+	private LoanRequest currentLoanRequest;
+	private List<LoanRequest> currentLoanRequests;
 			
 	/* all get and set functions for temp property*/
 	public LoanRequest getCurrentLoanRequest() {
-		return CurrentLoanRequest;
+		return currentLoanRequest;
 	}	
 	
 	public void setCurrentLoanRequest(LoanRequest currentloanrequest) {
-		this.CurrentLoanRequest = currentloanrequest;
+		this.currentLoanRequest = currentloanrequest;
 	}
 	public List<LoanRequest> getCurrentLoanRequests() {
-		return CurrentLoanRequests;
+		return currentLoanRequests;
 	}	
 	
 	public void setCurrentLoanRequests(List<LoanRequest> currentloanrequests) {
-		this.CurrentLoanRequests = currentloanrequests;
+		this.currentLoanRequests = currentloanrequests;
 	}
 	
 	/* invarints checking*/

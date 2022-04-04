@@ -150,8 +150,8 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			/* Logic here */
 			CreditHistory his = null;
 			his = (CreditHistory) EntityManager.createObject("CreditHistory");
-			his = services.getCreditHistory(CurrentLoanRequest.getSecurityNumber(), CurrentLoanRequest.getName());
-			CurrentLoanRequest.setRequestedCreditHistory(his);
+			his = services.getCreditHistory(currentLoanRequest.getSecurityNumber(), currentLoanRequest.getName());
+			currentLoanRequest.setRequestedCreditHistory(his);
 			EntityManager.addObject("CreditHistory", his);
 			
 			
@@ -160,7 +160,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			if (!(true && 
 			true
 			 && 
-			CurrentLoanRequest.getRequestedCreditHistory() == his
+			currentLoanRequest.getRequestedCreditHistory() == his
 			 && 
 			StandardOPs.includes(((List<CreditHistory>)EntityManager.getAllInstancesOf("CreditHistory")), his)
 			 && 
@@ -235,7 +235,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 		/* previous state in post-condition*/
 
 		/* check precondition */
-		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(CurrentLoanRequest.getRequestedCAHistory()) == false && StandardOPs.oclIsundefined(CurrentLoanRequest.getRequestedCreditHistory()) == false) 
+		if (StandardOPs.oclIsundefined(this.getCurrentLoanRequest()) == false && StandardOPs.oclIsundefined(currentLoanRequest.getRequestedCAHistory()) == false && StandardOPs.oclIsundefined(currentLoanRequest.getRequestedCreditHistory()) == false)
 		{ 
 			/* Logic here */
 			this.getCurrentLoanRequest().setCreditScore(100);
@@ -271,15 +271,15 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 	
 	
 	/* temp property for controller */
-	private LoanRequest CurrentLoanRequest;
+	private LoanRequest currentLoanRequest;
 			
 	/* all get and set functions for temp property*/
 	public LoanRequest getCurrentLoanRequest() {
-		return CurrentLoanRequest;
+		return currentLoanRequest;
 	}	
 	
 	public void setCurrentLoanRequest(LoanRequest currentloanrequest) {
-		this.CurrentLoanRequest = currentloanrequest;
+		this.currentLoanRequest = currentloanrequest;
 	}
 	
 	/* invarints checking*/
