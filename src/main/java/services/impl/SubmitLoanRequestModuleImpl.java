@@ -244,7 +244,9 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			this.getCurrentLoanRequest().getRequestedCAHistory() == ca
 			 && 
 			StandardOPs.includes(((List<CheckingAccount>)EntityManager.getAllInstancesOf(CheckingAccount.class)), ca)
-			 && 
+			 &&
+			EntityManager.saveModified(LoanRequest.class)
+			 &&
 			true)) {
 				throw new PostconditionException();
 			}
