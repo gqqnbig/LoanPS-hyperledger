@@ -14,8 +14,12 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 import org.apache.commons.lang3.SerializationUtils;
 import java.util.Iterator;
+import org.hyperledger.fabric.shim.*;
+import org.hyperledger.fabric.contract.annotation.*;
+import org.hyperledger.fabric.contract.*;
 
-public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLetterAndAgreementModule, Serializable {
+@Contract
+public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLetterAndAgreementModule, Serializable, ContractInterface {
 	
 	
 	public static Map<String, List<String>> opINVRelatedEntity = new HashMap<String, List<String>>();
@@ -38,10 +42,20 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 	
 	/* Generate inject for sharing temp variables between use cases in system service */
 	public void refresh() {
-		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf("LoanProcessingSystemSystem").get(0);
+		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf(LoanProcessingSystemSystem.class).get(0);
 	}
 	
 	/* Generate buiness logic according to functional requirement */
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public List<LoanRequest> listApprovalRequest(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = listApprovalRequest();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<LoanRequest> listApprovalRequest() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -50,7 +64,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 		//Get rs
 		List<LoanRequest> rs = new LinkedList<>();
 		//no nested iterator --  iterator: select previous:select
-		for (LoanRequest r : (List<LoanRequest>)EntityManager.getAllInstancesOf("LoanRequest"))
+		for (LoanRequest r : (List<LoanRequest>)EntityManager.getAllInstancesOf(LoanRequest.class))
 		{
 			if (r.getStatus() == LoanRequestStatus.APPROVED)
 			{
@@ -88,6 +102,16 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 	 
 	static {opINVRelatedEntity.put("listApprovalRequest", Arrays.asList(""));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean genereateApprovalLetter(final Context ctx, int id) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = genereateApprovalLetter(id);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean genereateApprovalLetter(int id) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -96,7 +120,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 		//Get r
 		LoanRequest r = null;
 		//no nested iterator --  iterator: any previous:any
-		for (LoanRequest lr : (List<LoanRequest>)EntityManager.getAllInstancesOf("LoanRequest"))
+		for (LoanRequest lr : (List<LoanRequest>)EntityManager.getAllInstancesOf(LoanRequest.class))
 		{
 			if (lr.getRequestID() == id)
 			{
@@ -129,7 +153,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 			 && 
 			this.getCurrentLoanRequest() == r
 			 && 
-			StandardOPs.includes(((List<ApprovalLetter>)EntityManager.getAllInstancesOf("ApprovalLetter")), l)
+			StandardOPs.includes(((List<ApprovalLetter>)EntityManager.getAllInstancesOf(ApprovalLetter.class)), l)
 			 && 
 			true)) {
 				throw new PostconditionException();
@@ -150,6 +174,16 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 	 
 	static {opINVRelatedEntity.put("genereateApprovalLetter", Arrays.asList("LoanRequest","","ApprovalLetter"));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean emailToAppliant(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = emailToAppliant();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean emailToAppliant() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -183,6 +217,16 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 	} 
 	 
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean generateLoanAgreement(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = generateLoanAgreement();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean generateLoanAgreement() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -207,7 +251,7 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 			 && 
 			this.getCurrentLoanRequest().getAttachedLoanAgreement() == la
 			 && 
-			StandardOPs.includes(((List<LoanAgreement>)EntityManager.getAllInstancesOf("LoanAgreement")), la)
+			StandardOPs.includes(((List<LoanAgreement>)EntityManager.getAllInstancesOf(LoanAgreement.class)), la)
 			 && 
 			true)) {
 				throw new PostconditionException();
@@ -228,6 +272,16 @@ public class GenerateLoanLetterAndAgreementModuleImpl implements GenerateLoanLet
 	 
 	static {opINVRelatedEntity.put("generateLoanAgreement", Arrays.asList("LoanAgreement",""));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean printLoanAgreement(final Context ctx, int number) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = printLoanAgreement(number);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean printLoanAgreement(int number) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		

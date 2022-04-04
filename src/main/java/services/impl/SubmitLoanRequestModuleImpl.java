@@ -14,8 +14,12 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 import org.apache.commons.lang3.SerializationUtils;
 import java.util.Iterator;
+import org.hyperledger.fabric.shim.*;
+import org.hyperledger.fabric.contract.annotation.*;
+import org.hyperledger.fabric.contract.*;
 
-public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Serializable {
+@Contract
+public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Serializable, ContractInterface {
 	
 	
 	public static Map<String, List<String>> opINVRelatedEntity = new HashMap<String, List<String>>();
@@ -38,10 +42,20 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 	
 	/* Generate inject for sharing temp variables between use cases in system service */
 	public void refresh() {
-		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf("LoanProcessingSystemSystem").get(0);
+		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf(LoanProcessingSystemSystem.class).get(0);
 	}
 	
 	/* Generate buiness logic according to functional requirement */
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean enterLoanInformation(final Context ctx, int requestid, String name, float loanamount, String loanpurpose, float income, int phonenumber, String postaladdress, int zipcode, String email, String workreferences, String creditreferences, int checkingaccountnumber, int securitynumber) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = enterLoanInformation(requestid, name, loanamount, loanpurpose, income, phonenumber, postaladdress, zipcode, email, workreferences, creditreferences, checkingaccountnumber, securitynumber);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean enterLoanInformation(int requestid, String name, float loanamount, String loanpurpose, float income, int phonenumber, String postaladdress, int zipcode, String email, String workreferences, String creditreferences, int checkingaccountnumber, int securitynumber) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -50,7 +64,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 		//Get loanrequest
 		LoanRequest loanrequest = null;
 		//no nested iterator --  iterator: any previous:any
-		for (LoanRequest loa : (List<LoanRequest>)EntityManager.getAllInstancesOf("LoanRequest"))
+		for (LoanRequest loa : (List<LoanRequest>)EntityManager.getAllInstancesOf(LoanRequest.class))
 		{
 			if (loa.getRequestID() == requestid)
 			{
@@ -114,7 +128,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			 && 
 			loa.getSecurityNumber() == securitynumber
 			 && 
-			StandardOPs.includes(((List<LoanRequest>)EntityManager.getAllInstancesOf("LoanRequest")), loa)
+			StandardOPs.includes(((List<LoanRequest>)EntityManager.getAllInstancesOf(LoanRequest.class)), loa)
 			 && 
 			this.getCurrentLoanRequest() == loa
 			 && 
@@ -138,6 +152,16 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 	 
 	static {opINVRelatedEntity.put("enterLoanInformation", Arrays.asList("","LoanRequest"));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean creditRequest(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = creditRequest();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean creditRequest() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -162,7 +186,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			 && 
 			currentLoanRequest.getRequestedCreditHistory() == his
 			 && 
-			StandardOPs.includes(((List<CreditHistory>)EntityManager.getAllInstancesOf("CreditHistory")), his)
+			StandardOPs.includes(((List<CreditHistory>)EntityManager.getAllInstancesOf(CreditHistory.class)), his)
 			 && 
 			true)) {
 				throw new PostconditionException();
@@ -183,6 +207,16 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 	 
 	static {opINVRelatedEntity.put("creditRequest", Arrays.asList("CreditHistory",""));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean accountStatusRequest(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = accountStatusRequest();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean accountStatusRequest() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -207,7 +241,7 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 			 && 
 			this.getCurrentLoanRequest().getRequestedCAHistory() == ca
 			 && 
-			StandardOPs.includes(((List<CheckingAccount>)EntityManager.getAllInstancesOf("CheckingAccount")), ca)
+			StandardOPs.includes(((List<CheckingAccount>)EntityManager.getAllInstancesOf(CheckingAccount.class)), ca)
 			 && 
 			true)) {
 				throw new PostconditionException();
@@ -228,6 +262,16 @@ public class SubmitLoanRequestModuleImpl implements SubmitLoanRequestModule, Ser
 	 
 	static {opINVRelatedEntity.put("accountStatusRequest", Arrays.asList("","CheckingAccount"));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public int calculateScore(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = calculateScore();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public int calculateScore() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		

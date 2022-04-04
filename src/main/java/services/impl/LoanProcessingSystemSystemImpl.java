@@ -14,8 +14,14 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 import org.apache.commons.lang3.SerializationUtils;
 import java.util.Iterator;
+import org.hyperledger.fabric.shim.*;
+import org.hyperledger.fabric.contract.annotation.*;
+import org.hyperledger.fabric.contract.*;
+import converters.*;
+import com.owlike.genson.GensonBuilder;
 
-public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSystem, Serializable {
+@Contract
+public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSystem, Serializable, ContractInterface {
 	
 	
 	public static Map<String, List<String>> opINVRelatedEntity = new HashMap<String, List<String>>();
@@ -29,18 +35,29 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 
 	public void refresh() {
 		SubmitLoanRequestModule submitloanrequestmodule_service = (SubmitLoanRequestModule) ServiceManager
-				.getAllInstancesOf("SubmitLoanRequestModule").get(0);
+				.getAllInstancesOf(SubmitLoanRequestModule.class).get(0);
 		EnterValidatedCreditReferencesModule entervalidatedcreditreferencesmodule_service = (EnterValidatedCreditReferencesModule) ServiceManager
-				.getAllInstancesOf("EnterValidatedCreditReferencesModule").get(0);
+				.getAllInstancesOf(EnterValidatedCreditReferencesModule.class).get(0);
 		EvaluateLoanRequestModule evaluateloanrequestmodule_service = (EvaluateLoanRequestModule) ServiceManager
-				.getAllInstancesOf("EvaluateLoanRequestModule").get(0);
+				.getAllInstancesOf(EvaluateLoanRequestModule.class).get(0);
 		GenerateLoanLetterAndAgreementModule generateloanletterandagreementmodule_service = (GenerateLoanLetterAndAgreementModule) ServiceManager
-				.getAllInstancesOf("GenerateLoanLetterAndAgreementModule").get(0);
+				.getAllInstancesOf(GenerateLoanLetterAndAgreementModule.class).get(0);
 		ManageLoanTermCRUDService manageloantermcrudservice_service = (ManageLoanTermCRUDService) ServiceManager
-				.getAllInstancesOf("ManageLoanTermCRUDService").get(0);
+				.getAllInstancesOf(ManageLoanTermCRUDService.class).get(0);
 	}			
 	
 	/* Generate buiness logic according to functional requirement */
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean bookNewLoan(final Context ctx, int requestid, int loanid, int accountid, String startdate, String enddate, int repaymentdays) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var genson = new GensonBuilder().withConverters(new LocalDateConverter()).create();
+		var res = bookNewLoan(requestid, loanid, accountid, genson.deserialize("\"" + startdate + "\"", LocalDate.class), genson.deserialize("\"" + enddate + "\"", LocalDate.class), repaymentdays);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean bookNewLoan(int requestid, int loanid, int accountid, LocalDate startdate, LocalDate enddate, int repaymentdays) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -49,7 +66,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 		//Get loan
 		Loan loan = null;
 		//no nested iterator --  iterator: any previous:any
-		for (Loan loa : (List<Loan>)EntityManager.getAllInstancesOf("Loan"))
+		for (Loan loa : (List<Loan>)EntityManager.getAllInstancesOf(Loan.class))
 		{
 			if (loa.getLoanID() == loanid)
 			{
@@ -62,7 +79,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 		//Get r
 		LoanRequest r = null;
 		//no nested iterator --  iterator: any previous:any
-		for (LoanRequest lr : (List<LoanRequest>)EntityManager.getAllInstancesOf("LoanRequest"))
+		for (LoanRequest lr : (List<LoanRequest>)EntityManager.getAllInstancesOf(LoanRequest.class))
 		{
 			if (lr.getRequestID() == requestid)
 			{
@@ -75,7 +92,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 		//Get la
 		LoanAccount la = null;
 		//no nested iterator --  iterator: any previous:any
-		for (LoanAccount lacc : (List<LoanAccount>)EntityManager.getAllInstancesOf("LoanAccount"))
+		for (LoanAccount lacc : (List<LoanAccount>)EntityManager.getAllInstancesOf(LoanAccount.class))
 		{
 			if (lacc.getLoanAccountID() == accountid)
 			{
@@ -142,7 +159,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 			 && 
 			(StandardOPs.oclIsundefined(la) == true ? true
 			 && 
-			StandardOPs.includes(((List<LoanAccount>)EntityManager.getAllInstancesOf("LoanAccount")), lacc)
+			StandardOPs.includes(((List<LoanAccount>)EntityManager.getAllInstancesOf(LoanAccount.class)), lacc)
 			 && 
 			lacc.getBalance() == r.getLoanAmount()
 			 && 
@@ -152,7 +169,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 			 && 
 			loa.getRemainAmountToPay() == r.getLoanAmount()
 			 && 
-			StandardOPs.includes(((List<Loan>)EntityManager.getAllInstancesOf("Loan")), loa)
+			StandardOPs.includes(((List<Loan>)EntityManager.getAllInstancesOf(Loan.class)), loa)
 			 && 
 			r.getApprovalLoan() == loa
 			 && 
@@ -177,6 +194,16 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 	 
 	static {opINVRelatedEntity.put("bookNewLoan", Arrays.asList("LoanRequest","LoanAccount","LoanAccount","LoanAccount"));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean generateStandardPaymentNotice(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = generateStandardPaymentNotice();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean generateStandardPaymentNotice() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -185,7 +212,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 		//Get loans
 		List<Loan> loans = new LinkedList<>();
 		//no nested iterator --  iterator: select previous:select
-		for (Loan loa : (List<Loan>)EntityManager.getAllInstancesOf("Loan"))
+		for (Loan loa : (List<Loan>)EntityManager.getAllInstancesOf(Loan.class))
 		{
 			if (loa.getStatus() == LoanStatus.LSOPEN && LocalDate.now().plusDays(3).isAfter(loa.getCurrentOverDueDate()))
 			{
@@ -237,6 +264,16 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 	 
 	static {opINVRelatedEntity.put("generateStandardPaymentNotice", Arrays.asList("Loan"));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean generateLateNotice(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = generateLateNotice();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean generateLateNotice() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -245,7 +282,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 		//Get loans
 		List<Loan> loans = new LinkedList<>();
 		//no nested iterator --  iterator: select previous:select
-		for (Loan loa : (List<Loan>)EntityManager.getAllInstancesOf("Loan"))
+		for (Loan loa : (List<Loan>)EntityManager.getAllInstancesOf(Loan.class))
 		{
 			if (loa.getStatus() == LoanStatus.LSOPEN && LocalDate.now().isAfter(loa.getCurrentOverDueDate()))
 			{
@@ -297,6 +334,16 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 	 
 	static {opINVRelatedEntity.put("generateLateNotice", Arrays.asList("Loan"));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean listBookedLoans(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = listBookedLoans();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean listBookedLoans() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -327,6 +374,16 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 	} 
 	 
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean loanPayment(final Context ctx, int loanid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = loanPayment(loanid);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean loanPayment(int loanid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -335,7 +392,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 		//Get loan
 		Loan loan = null;
 		//no nested iterator --  iterator: any previous:any
-		for (Loan loa : (List<Loan>)EntityManager.getAllInstancesOf("Loan"))
+		for (Loan loa : (List<Loan>)EntityManager.getAllInstancesOf(Loan.class))
 		{
 			if (loa.getLoanID() == loanid)
 			{
@@ -381,6 +438,16 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 	 
 	static {opINVRelatedEntity.put("loanPayment", Arrays.asList("Loan"));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean closeOutLoan(final Context ctx, int loanid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = closeOutLoan(loanid);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean closeOutLoan(int loanid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -389,7 +456,7 @@ public class LoanProcessingSystemSystemImpl implements LoanProcessingSystemSyste
 		//Get loan
 		Loan loan = null;
 		//no nested iterator --  iterator: any previous:any
-		for (Loan loa : (List<Loan>)EntityManager.getAllInstancesOf("Loan"))
+		for (Loan loa : (List<Loan>)EntityManager.getAllInstancesOf(Loan.class))
 		{
 			if (loa.getLoanID() == loanid)
 			{

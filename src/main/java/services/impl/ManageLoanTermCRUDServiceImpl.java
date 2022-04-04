@@ -14,8 +14,12 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 import org.apache.commons.lang3.SerializationUtils;
 import java.util.Iterator;
+import org.hyperledger.fabric.shim.*;
+import org.hyperledger.fabric.contract.annotation.*;
+import org.hyperledger.fabric.contract.*;
 
-public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService, Serializable {
+@Contract
+public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService, Serializable, ContractInterface {
 	
 	
 	public static Map<String, List<String>> opINVRelatedEntity = new HashMap<String, List<String>>();
@@ -38,10 +42,20 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 	
 	/* Generate inject for sharing temp variables between use cases in system service */
 	public void refresh() {
-		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf("LoanProcessingSystemSystem").get(0);
+		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf(LoanProcessingSystemSystem.class).get(0);
 	}
 	
 	/* Generate buiness logic according to functional requirement */
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean createLoanTerm(final Context ctx, int itemid, String content) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = createLoanTerm(itemid, content);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean createLoanTerm(int itemid, String content) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -50,7 +64,7 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 		//Get loanterm
 		LoanTerm loanterm = null;
 		//no nested iterator --  iterator: any previous:any
-		for (LoanTerm loa : (List<LoanTerm>)EntityManager.getAllInstancesOf("LoanTerm"))
+		for (LoanTerm loa : (List<LoanTerm>)EntityManager.getAllInstancesOf(LoanTerm.class))
 		{
 			if (loa.getItemID() == itemid)
 			{
@@ -80,7 +94,7 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 			 && 
 			loa.getContent() == content
 			 && 
-			StandardOPs.includes(((List<LoanTerm>)EntityManager.getAllInstancesOf("LoanTerm")), loa)
+			StandardOPs.includes(((List<LoanTerm>)EntityManager.getAllInstancesOf(LoanTerm.class)), loa)
 			 && 
 			true)) {
 				throw new PostconditionException();
@@ -102,6 +116,16 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 	 
 	static {opINVRelatedEntity.put("createLoanTerm", Arrays.asList("LoanTerm"));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public LoanTerm queryLoanTerm(final Context ctx, int itemid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = queryLoanTerm(itemid);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public LoanTerm queryLoanTerm(int itemid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -110,7 +134,7 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 		//Get loanterm
 		LoanTerm loanterm = null;
 		//no nested iterator --  iterator: any previous:any
-		for (LoanTerm loa : (List<LoanTerm>)EntityManager.getAllInstancesOf("LoanTerm"))
+		for (LoanTerm loa : (List<LoanTerm>)EntityManager.getAllInstancesOf(LoanTerm.class))
 		{
 			if (loa.getItemID() == itemid)
 			{
@@ -143,6 +167,16 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 	} 
 	 
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean modifyLoanTerm(final Context ctx, int itemid, String content) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = modifyLoanTerm(itemid, content);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean modifyLoanTerm(int itemid, String content) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -151,7 +185,7 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 		//Get loanterm
 		LoanTerm loanterm = null;
 		//no nested iterator --  iterator: any previous:any
-		for (LoanTerm loa : (List<LoanTerm>)EntityManager.getAllInstancesOf("LoanTerm"))
+		for (LoanTerm loa : (List<LoanTerm>)EntityManager.getAllInstancesOf(LoanTerm.class))
 		{
 			if (loa.getItemID() == itemid)
 			{
@@ -197,6 +231,16 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 	 
 	static {opINVRelatedEntity.put("modifyLoanTerm", Arrays.asList("LoanTerm"));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean deleteLoanTerm(final Context ctx, int itemid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = deleteLoanTerm(itemid);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean deleteLoanTerm(int itemid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -205,7 +249,7 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 		//Get loanterm
 		LoanTerm loanterm = null;
 		//no nested iterator --  iterator: any previous:any
-		for (LoanTerm loa : (List<LoanTerm>)EntityManager.getAllInstancesOf("LoanTerm"))
+		for (LoanTerm loa : (List<LoanTerm>)EntityManager.getAllInstancesOf(LoanTerm.class))
 		{
 			if (loa.getItemID() == itemid)
 			{
@@ -218,7 +262,7 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 		/* previous state in post-condition*/
 
 		/* check precondition */
-		if (StandardOPs.oclIsundefined(loanterm) == false && StandardOPs.includes(((List<LoanTerm>)EntityManager.getAllInstancesOf("LoanTerm")), loanterm)) 
+		if (StandardOPs.oclIsundefined(loanterm) == false && StandardOPs.includes(((List<LoanTerm>)EntityManager.getAllInstancesOf(LoanTerm.class)), loanterm)) 
 		{ 
 			/* Logic here */
 			EntityManager.deleteObject("LoanTerm", loanterm);
@@ -226,7 +270,7 @@ public class ManageLoanTermCRUDServiceImpl implements ManageLoanTermCRUDService,
 			
 			refresh();
 			// post-condition checking
-			if (!(StandardOPs.excludes(((List<LoanTerm>)EntityManager.getAllInstancesOf("LoanTerm")), loanterm)
+			if (!(StandardOPs.excludes(((List<LoanTerm>)EntityManager.getAllInstancesOf(LoanTerm.class)), loanterm)
 			 && 
 			true)) {
 				throw new PostconditionException();

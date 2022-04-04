@@ -14,8 +14,12 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 import org.apache.commons.lang3.SerializationUtils;
 import java.util.Iterator;
+import org.hyperledger.fabric.shim.*;
+import org.hyperledger.fabric.contract.annotation.*;
+import org.hyperledger.fabric.contract.*;
 
-public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule, Serializable {
+@Contract
+public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule, Serializable, ContractInterface {
 	
 	
 	public static Map<String, List<String>> opINVRelatedEntity = new HashMap<String, List<String>>();
@@ -38,10 +42,20 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 	
 	/* Generate inject for sharing temp variables between use cases in system service */
 	public void refresh() {
-		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf("LoanProcessingSystemSystem").get(0);
+		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf(LoanProcessingSystemSystem.class).get(0);
 	}
 	
 	/* Generate buiness logic according to functional requirement */
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public List<LoanRequest> listTenLoanRequest(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = listTenLoanRequest();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<LoanRequest> listTenLoanRequest() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -50,7 +64,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 		//Get rs
 		List<LoanRequest> rs = new LinkedList<>();
 		//no nested iterator --  iterator: select previous:select
-		for (LoanRequest r : (List<LoanRequest>)EntityManager.getAllInstancesOf("LoanRequest"))
+		for (LoanRequest r : (List<LoanRequest>)EntityManager.getAllInstancesOf(LoanRequest.class))
 		{
 			if (r.getStatus() == LoanRequestStatus.REFERENCESVALIDATED)
 			{
@@ -88,6 +102,16 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 	 
 	static {opINVRelatedEntity.put("listTenLoanRequest", Arrays.asList(""));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public LoanRequest chooseOneForReview(final Context ctx, int requestid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = chooseOneForReview(requestid);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public LoanRequest chooseOneForReview(int requestid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -135,6 +159,16 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 	 
 	static {opINVRelatedEntity.put("chooseOneForReview", Arrays.asList(""));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public CreditHistory checkCreditHistory(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = checkCreditHistory();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public CreditHistory checkCreditHistory() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -165,6 +199,16 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 	 
 	static {opINVRelatedEntity.put("checkCreditHistory", Arrays.asList(""));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public CheckingAccount reviewCheckingAccount(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = reviewCheckingAccount();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public CheckingAccount reviewCheckingAccount() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -195,6 +239,16 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 	 
 	static {opINVRelatedEntity.put("reviewCheckingAccount", Arrays.asList(""));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public List<LoanTerm> listAvaiableLoanTerm(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = listAvaiableLoanTerm();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<LoanTerm> listAvaiableLoanTerm() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -213,7 +267,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 				throw new PostconditionException();
 			}
 			
-			refresh(); return ((List<LoanTerm>)EntityManager.getAllInstancesOf("LoanTerm"));
+			refresh(); return ((List<LoanTerm>)EntityManager.getAllInstancesOf(LoanTerm.class));
 		}
 		else
 		{
@@ -222,6 +276,16 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 	} 
 	 
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean addLoanTerm(final Context ctx, int termid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = addLoanTerm(termid);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean addLoanTerm(int termid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -230,7 +294,7 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 		//Get loanterm
 		LoanTerm loanterm = null;
 		//no nested iterator --  iterator: any previous:any
-		for (LoanTerm loa : (List<LoanTerm>)EntityManager.getAllInstancesOf("LoanTerm"))
+		for (LoanTerm loa : (List<LoanTerm>)EntityManager.getAllInstancesOf(LoanTerm.class))
 		{
 			if (loa.getItemID() == termid)
 			{
@@ -272,6 +336,16 @@ public class EvaluateLoanRequestModuleImpl implements EvaluateLoanRequestModule,
 	 
 	static {opINVRelatedEntity.put("addLoanTerm", Arrays.asList("LoanTerm"));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean approveLoanRequest(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = approveLoanRequest();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean approveLoanRequest() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		

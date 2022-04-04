@@ -14,8 +14,12 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 import org.apache.commons.lang3.SerializationUtils;
 import java.util.Iterator;
+import org.hyperledger.fabric.shim.*;
+import org.hyperledger.fabric.contract.annotation.*;
+import org.hyperledger.fabric.contract.*;
 
-public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedCreditReferencesModule, Serializable {
+@Contract
+public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedCreditReferencesModule, Serializable, ContractInterface {
 	
 	
 	public static Map<String, List<String>> opINVRelatedEntity = new HashMap<String, List<String>>();
@@ -38,10 +42,20 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 	
 	/* Generate inject for sharing temp variables between use cases in system service */
 	public void refresh() {
-		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf("LoanProcessingSystemSystem").get(0);
+		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf(LoanProcessingSystemSystem.class).get(0);
 	}
 	
 	/* Generate buiness logic according to functional requirement */
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public List<LoanRequest> listSubmitedLoanRequest(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = listSubmitedLoanRequest();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<LoanRequest> listSubmitedLoanRequest() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -50,7 +64,7 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 		//Get rs
 		List<LoanRequest> rs = new LinkedList<>();
 		//no nested iterator --  iterator: select previous:select
-		for (LoanRequest r : (List<LoanRequest>)EntityManager.getAllInstancesOf("LoanRequest"))
+		for (LoanRequest r : (List<LoanRequest>)EntityManager.getAllInstancesOf(LoanRequest.class))
 		{
 			if (r.getStatus() == LoanRequestStatus.SUBMITTED)
 			{
@@ -88,6 +102,16 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 	 
 	static {opINVRelatedEntity.put("listSubmitedLoanRequest", Arrays.asList(""));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public LoanRequest chooseLoanRequest(final Context ctx, int requestid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = chooseLoanRequest(requestid);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public LoanRequest chooseLoanRequest(int requestid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -135,6 +159,16 @@ public class EnterValidatedCreditReferencesModuleImpl implements EnterValidatedC
 	 
 	static {opINVRelatedEntity.put("chooseLoanRequest", Arrays.asList(""));}
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean markRequestValid(final Context ctx) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = markRequestValid();
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean markRequestValid() throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		

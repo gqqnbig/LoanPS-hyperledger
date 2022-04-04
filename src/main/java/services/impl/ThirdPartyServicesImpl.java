@@ -14,8 +14,12 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 import org.apache.commons.lang3.SerializationUtils;
 import java.util.Iterator;
+import org.hyperledger.fabric.shim.*;
+import org.hyperledger.fabric.contract.annotation.*;
+import org.hyperledger.fabric.contract.*;
 
-public class ThirdPartyServicesImpl implements ThirdPartyServices, Serializable {
+@Contract
+public class ThirdPartyServicesImpl implements ThirdPartyServices, Serializable, ContractInterface {
 	
 	
 	public static Map<String, List<String>> opINVRelatedEntity = new HashMap<String, List<String>>();
@@ -33,10 +37,20 @@ public class ThirdPartyServicesImpl implements ThirdPartyServices, Serializable 
 	
 	/* Generate inject for sharing temp variables between use cases in system service */
 	public void refresh() {
-		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf("LoanProcessingSystemSystem").get(0);
+		LoanProcessingSystemSystem loanprocessingsystemsystem_service = (LoanProcessingSystemSystem) ServiceManager.getAllInstancesOf(LoanProcessingSystemSystem.class).get(0);
 	}
 	
 	/* Generate buiness logic according to functional requirement */
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean sendEmail(final Context ctx, String emailaddress, String title, String content) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = sendEmail(emailaddress, title, content);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean sendEmail(String emailaddress, String title, String content) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -68,6 +82,16 @@ public class ThirdPartyServicesImpl implements ThirdPartyServices, Serializable 
 	} 
 	 
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean print(final Context ctx, String content, int numbers) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = print(content, numbers);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean print(String content, int numbers) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -99,6 +123,16 @@ public class ThirdPartyServicesImpl implements ThirdPartyServices, Serializable 
 	} 
 	 
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public LoanAccount createLoanAccount(final Context ctx, int id) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = createLoanAccount(id);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public LoanAccount createLoanAccount(int id) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -126,6 +160,16 @@ public class ThirdPartyServicesImpl implements ThirdPartyServices, Serializable 
 	} 
 	 
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public boolean transferFunds(final Context ctx, int id, float amount) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = transferFunds(id, amount);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean transferFunds(int id, float amount) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -156,6 +200,16 @@ public class ThirdPartyServicesImpl implements ThirdPartyServices, Serializable 
 	} 
 	 
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public CreditHistory getCreditHistory(final Context ctx, int securityid, String name) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = getCreditHistory(securityid, name);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public CreditHistory getCreditHistory(int securityid, String name) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
@@ -184,6 +238,16 @@ public class ThirdPartyServicesImpl implements ThirdPartyServices, Serializable 
 	} 
 	 
 	
+	
+	@Transaction(intent = Transaction.TYPE.SUBMIT)
+	public CheckingAccount getCheckingAccountStatus(final Context ctx, int cid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
+		ChaincodeStub stub = ctx.getStub();
+		EntityManager.setStub(stub);
+
+		var res = getCheckingAccountStatus(cid);
+		return res;
+	}
+
 	@SuppressWarnings("unchecked")
 	public CheckingAccount getCheckingAccountStatus(int cid) throws PreconditionException, PostconditionException, ThirdPartyServiceException {
 		
