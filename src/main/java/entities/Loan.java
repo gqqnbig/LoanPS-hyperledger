@@ -120,8 +120,11 @@ public class Loan implements Serializable {
 	/* all functions for reference*/
 	@JsonIgnore
 	public LoanRequest getReferedLoanRequest() {
-		if (ReferedLoanRequest == null)
+		if (ReferedLoanRequest == null) {
+			if (ReferedLoanRequestPK instanceof Long)
+				ReferedLoanRequestPK = Math.toIntExact((long) ReferedLoanRequestPK);
 			ReferedLoanRequest = EntityManager.getLoanRequestByPK(ReferedLoanRequestPK);
+		}
 		return ReferedLoanRequest;
 	}	
 	

@@ -144,9 +144,16 @@ testBookNewLoan() {
 		fail || return
 	fi
 
-	pci -C mychannel -n loanps --waitForEvent -c '{"function":"SubmitLoanRequestModuleImpl:enterLoanInformation","Args":["1","1","1","1","1","1","1","1","1","1","1","1","1"]}'
+	pci -C mychannel -n loanps --waitForEvent -c '{"function":"SubmitLoanRequestModuleImpl:enterLoanInformation","Args":["1","1","333","1","1","1","1","1","1","1","1","1","1"]}'
 
 	pci -C mychannel -n loanps --waitForEvent -c '{"function":"LoanProcessingSystemSystemImpl:bookNewLoan","Args":["1","1", "1000","2000-01-01","2020-01-01", "1"]}' || fail || return
+
+	peer chaincode query -C mychannel -n loanps -c '{"function":"LoanProcessingSystemSystemImpl:generateStandardPaymentNotice","Args":[]}' || fail || return
+}
+
+testScheduler() {
+	peer chaincode query -C mychannel -n loanps -c '{"function":"LoanProcessingSystemSystemImpl:generateStandardPaymentNotice","Args":[]}' || fail || return
+	peer chaincode query -C mychannel -n loanps -c '{"function":"LoanProcessingSystemSystemImpl:generateLateNotice","Args":[]}' || fail || return
 }
 
 source shunit2
